@@ -1,1 +1,86 @@
-{"app":"nostromo","v":1,"updatedAt":0,"players":[],"games":[],"settings":{"k":48}}
+{
+ "app": "nostromo",
+ "v": 1,
+ "updatedAt": 1791124432097,
+ "players": [
+  {
+   "id": "8632a986-e597-4d4b-91cf-bbf948cd2586",
+   "name": "Andrija",
+   "createdAt": 1791124432097
+  },
+  {
+   "id": "cf77f976-4cfe-4031-9a90-02bc6bc3b0d9",
+   "name": "Adrijan",
+   "createdAt": 1791124432097
+  },
+  {
+   "id": "40bd8819-5328-4d3e-9b73-bc29dc7cb006",
+   "name": "Bojan",
+   "createdAt": 1791124432097
+  },
+  {
+   "id": "cbdd2ca1-1b4e-4c1b-8840-8badb81c3758",
+   "name": "Lazar",
+   "createdAt": 1791124432097
+  },
+  {
+   "id": "69eb4687-d581-488b-a06d-52ac19123821",
+   "name": "Matija",
+   "createdAt": 1791124432097
+  },
+  {
+   "id": "29673bb8-3b9c-46f2-a375-f6af407f5e9c",
+   "name": "Ognjan",
+   "createdAt": 1791124432097
+  }
+ ],
+ "games": [
+  {
+   "id": "09cb1fc1-83e7-470f-b717-945e379532c5",
+   "createdAt": 1791124432097,
+   "date": "2026-10-04",
+   "note": "",
+   "participants": [
+    {
+     "playerId": "8632a986-e597-4d4b-91cf-bbf948cd2586",
+     "faction": "keleres",
+     "points": 10,
+     "result": "W"
+    },
+    {
+     "playerId": "cf77f976-4cfe-4031-9a90-02bc6bc3b0d9",
+     "faction": "nekro",
+     "points": 8,
+     "result": "L"
+    },
+    {
+     "playerId": "40bd8819-5328-4d3e-9b73-bc29dc7cb006",
+     "faction": "lastbastion",
+     "points": 5,
+     "result": "L"
+    },
+    {
+     "playerId": "cbdd2ca1-1b4e-4c1b-8840-8badb81c3758",
+     "faction": "titans",
+     "points": 7,
+     "result": "L"
+    },
+    {
+     "playerId": "69eb4687-d581-488b-a06d-52ac19123821",
+     "faction": "sol",
+     "points": 8,
+     "result": "L"
+    },
+    {
+     "playerId": "29673bb8-3b9c-46f2-a375-f6af407f5e9c",
+     "faction": "naazrokha",
+     "points": 7,
+     "result": "L"
+    }
+   ]
+  }
+ ],
+ "settings": {
+  "k": 48
+ }
+}
