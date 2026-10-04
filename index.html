@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070819">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nostromo">
+<title>Nostromo · Twilight Imperium</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0d22'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%235be7ff'/%3E%3Cellipse cx='16' cy='16' rx='13' ry='4.5' fill='none' stroke='%239b8cff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:dark;
+  --bg0:#04050d; --panel:rgba(17,20,46,.78); --panel2:rgba(34,39,82,.55); --field:rgba(4,6,20,.62);
+  --line:rgba(140,150,255,.17); --line2:rgba(140,150,255,.34);
+  --text:#e9edff; --muted:#909acb;
+  --cyan:#55e3ff; --violet:#9b8cff; --gold:#ffcf5a; --silver:#c7cee6; --bronze:#e0a070;
+  --good:#58e8a4; --bad:#ff7d8d; --warn:#ffc46b; --danger:#ff7d8d;
+  --g-base:#55e3ff; --g-pok:#b39bff; --g-codex:#58e8a4; --g-te:#ffb35c;
+  --nav-h:64px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg0);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;touch-action:manipulation;overflow-x:hidden}
+
+/* ---------- space ---------- */
+.space{position:fixed;inset:0;z-index:-3;background:
+  radial-gradient(1100px 700px at 88% -8%,rgba(122,84,255,.30),transparent 62%),
+  radial-gradient(900px 620px at -8% 28%,rgba(0,184,255,.17),transparent 62%),
+  radial-gradient(820px 560px at 62% 112%,rgba(255,92,200,.13),transparent 62%),
+  linear-gradient(180deg,#080a1e 0%,#04050d 100%)}
+.hexgrid{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.9;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='27.71' height='48'%3E%3Cpath d='M13.86 0L27.71 8V24L13.86 32L0 24V8ZM13.86 32V48' fill='none' stroke='%238c96ff' stroke-opacity='.11'/%3E%3C/svg%3E");
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 55%);mask-image:linear-gradient(180deg,#000 0%,transparent 55%)}
+.stars{position:fixed;top:0;left:0;width:1px;height:1px;z-index:-1;pointer-events:none;background:transparent}
+.stars.tw{animation:twinkle 5s ease-in-out infinite alternate}
+.stars.tw2{animation:twinkle 7s ease-in-out -3s infinite alternate}
+@keyframes twinkle{from{opacity:.25}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.stars.tw,.stars.tw2{animation:none}*{transition:none!important;animation:none!important}}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1060px;margin:0 auto;padding:0 18px}
+main.wrap{padding-bottom:72px}
+header.top{position:sticky;top:0;z-index:20;background:rgba(7,9,26,.72);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0 6px;padding-top:calc(12px + env(safe-area-inset-top))}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand svg{width:36px;height:36px;flex:none;filter:drop-shadow(0 0 9px rgba(85,227,255,.55))}
+.brand h1{margin:0;font-size:18px;line-height:1.1;letter-spacing:.2em;text-transform:uppercase;font-weight:800;background:linear-gradient(90deg,#fff,#b7c3ff 55%,#8fe9ff);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.brand small{display:block;font-size:10.5px;letter-spacing:.34em;color:var(--cyan);text-transform:uppercase;margin-top:3px}
+.tools{display:flex;gap:8px;align-items:center}
+.status{font-size:12.5px;color:var(--muted);padding:0 0 8px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;min-height:30px}
+.status.warn{color:var(--warn)}
+.status i.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good);margin-right:7px;vertical-align:middle}
+.status button{padding:3px 11px;font-size:12.5px;min-height:0}
+nav.tabs{display:flex;gap:4px}
+nav.tabs button{display:flex;align-items:center;gap:8px;background:none;border:0;border-bottom:2px solid transparent;border-radius:0;padding:10px 16px;font-size:15px;color:var(--muted);font-weight:650;letter-spacing:.02em}
+nav.tabs button svg{width:18px;height:18px}
+nav.tabs button:hover{color:var(--text);background:none;border-color:transparent;border-bottom-color:var(--line2)}
+nav.tabs button[aria-current="true"]{color:var(--cyan);border-bottom-color:var(--cyan);text-shadow:0 0 14px rgba(85,227,255,.5)}
+
+/* ---------- controls ---------- */
+button{font:inherit;cursor:pointer;border:1px solid var(--line2);background:var(--panel2);color:var(--text);padding:8px 14px;border-radius:10px;transition:border-color .15s,box-shadow .15s,transform .05s,background .15s}
+button:hover{border-color:var(--cyan)}
+button:active{transform:scale(.97)}
+button.primary{background:linear-gradient(135deg,#5be7ff,#8f7bff);color:#06101e;border-color:transparent;font-weight:750;box-shadow:0 0 18px rgba(91,231,255,.28)}
+button.primary:hover{box-shadow:0 0 26px rgba(122,170,255,.5);border-color:transparent}
+button.danger{color:var(--danger)}
+button.danger:hover{border-color:var(--danger)}
+button.small{padding:5px 11px;font-size:13px}
+button:disabled{opacity:.5;cursor:not-allowed}
+input,select,textarea{font:inherit;font-size:16px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 12px;max-width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(85,227,255,.2)}
+button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+input::placeholder,textarea::placeholder{color:#5f6899}
+option,optgroup{background:#0d1030;color:var(--text)}
+option:disabled{color:#5a6390}
+label{display:block;font-size:12.5px;color:var(--muted);margin:0 0 5px;letter-spacing:.03em}
+input[type=checkbox]{width:20px;height:20px;padding:0;accent-color:var(--cyan)}
+.badge{display:inline-block;min-width:18px;padding:0 6px;margin-left:7px;border-radius:9px;background:var(--danger);color:#1a0508;font-size:11.5px;font-weight:700;line-height:18px;text-align:center}
+
+/* ---------- headings, panels ---------- */
+h2{font-size:18px;margin:0;font-weight:750;letter-spacing:.02em}
+.muted{color:var(--muted);font-weight:400}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 14px;flex-wrap:wrap}
+.bar .right{display:flex;gap:8px;align-items:center}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 34px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.045)}
+.empty{padding:38px 18px;text-align:center;color:var(--muted)}
+.empty svg{width:64px;height:64px;color:var(--violet);opacity:.9;margin-bottom:8px}
+.empty p{margin:0 0 14px}
+.hint{font-size:13px;color:var(--muted);margin:12px 2px 0}
+.tag{display:inline-block;border:1px solid var(--line2);border-radius:999px;padding:0 9px;font-size:11.5px;line-height:19px;color:var(--muted);vertical-align:middle}
+.tag.g-base{color:var(--g-base);border-color:rgba(85,227,255,.4)}.tag.g-pok{color:var(--g-pok);border-color:rgba(179,155,255,.4)}
+.tag.g-codex{color:var(--g-codex);border-color:rgba(88,232,164,.4)}.tag.g-te{color:var(--g-te);border-color:rgba(255,179,92,.4)}
+.only-m{display:none}
+.delta.only-m{display:none}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:14px;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.filters > div{min-width:130px;flex:1 1 130px}
+.filters select,.filters input{width:100%}
+
+/* ---------- hex badges ---------- */
+.hexw{display:inline-block;flex:none}
+.hexw.g1{filter:drop-shadow(0 0 7px rgba(255,207,90,.55))}
+.hex{display:grid;place-items:center;width:34px;height:38px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,rgba(90,100,190,.55),rgba(50,56,120,.55));color:var(--muted);font-weight:800;font-size:14px}
+.g1 .hex{background:linear-gradient(160deg,#ffe38a,#d9a12b);color:#231a00}
+.g2 .hex{background:linear-gradient(160deg,#eef1fb,#9aa4c3);color:#101526}
+.g3 .hex{background:linear-gradient(160deg,#f0b98c,#b9703c);color:#241100}
+.hex.big{width:58px;height:64px;font-size:26px;background:linear-gradient(160deg,#5be7ff,#8f7bff);color:#06101e}
+
+/* ---------- ranking / factions (grid instead of table) ---------- */
+.lb{overflow:hidden}
+.lb-grid{display:grid;align-items:center;column-gap:8px;padding:10px 16px}
+.lb-grid.ranking{grid-template-columns:50px minmax(100px,1.3fr) 74px 68px 62px 66px 60px 76px 84px minmax(130px,1.6fr)}
+.lb-grid.factions{grid-template-columns:minmax(200px,2.4fr) 82px 82px 88px 96px 104px}
+.lb-head{background:rgba(60,68,140,.22);border-bottom:1px solid var(--line)}
+.lb-head .hcell{background:none;border:0;padding:6px 0;border-radius:0;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:650;text-align:right;white-space:nowrap}
+.lb-head .hcell:hover{color:var(--text)}
+.lb-head .hcell.on{color:var(--cyan)}
+.lb-head .l,.lb-grid .l{text-align:left}
+.lb-row{border-bottom:1px solid var(--line);padding-top:11px;padding-bottom:11px;transition:background .15s}
+.lb-row:last-child{border-bottom:0}
+.lb-row.click{cursor:pointer}
+.lb-row.click:hover{background:rgba(85,227,255,.06)}
+.lb-row > div{min-width:0;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lb-row .c-name{text-align:left;font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.lb-row .c-fav{text-align:left;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.lb-row .c-rank{text-align:left}
+.c-sum{display:none}
+.lb-grid.ranking .c-fav,.lb-grid.ranking.lb-head > :last-child{padding-left:14px}
+.c-bar{display:none}
+.elo{font-weight:800;font-size:18px;letter-spacing:.01em;text-shadow:0 0 14px rgba(85,227,255,.35)}
+.delta{display:inline-block;font-variant-numeric:tabular-nums;font-weight:700;font-size:12.5px;padding:0 8px;border-radius:999px;line-height:20px}
+.delta.up{color:var(--good);background:rgba(88,232,164,.12)}.delta.down{color:var(--bad);background:rgba(255,125,141,.12)}.delta.zero{color:var(--muted);background:rgba(140,150,255,.1)}
+.wbar{height:5px;border-radius:3px;background:rgba(140,150,255,.14);margin-top:7px;overflow:hidden}
+.wbar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:3px}
+.fname{display:flex;flex-direction:column;align-items:flex-start;gap:0}
+.fname b{font-weight:700;white-space:normal}
+
+/* ---------- games ---------- */
+.game{padding:14px 16px;margin-bottom:12px}
+.game-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.game-head strong{letter-spacing:.02em}
+.actions{display:flex;gap:6px}
+.pv{display:grid;grid-template-columns:30px minmax(90px,1.2fr) minmax(110px,1.4fr) 58px minmax(160px,1.3fr);gap:8px;align-items:center;padding:7px 10px;border-radius:10px}
+.pv:nth-child(odd){background:rgba(70,80,160,.10)}
+.pv.win{background:linear-gradient(90deg,rgba(255,207,90,.16),rgba(255,207,90,.04));box-shadow:inset 3px 0 0 var(--gold)}
+.pl-place{color:var(--muted);font-weight:800;text-align:center}
+.pv.win .pl-place{color:var(--gold)}
+.pl-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-fac{color:var(--muted);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-pts{text-align:right;font-variant-numeric:tabular-nums;font-weight:750}
+.pl-pts small{color:var(--muted);font-weight:400}
+.pl-elo{text-align:right;font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{margin:8px 2px 0;color:var(--muted);font-size:14px;white-space:pre-wrap}
+
+/* ---------- dialogs ---------- */
+dialog{border:1px solid var(--line2);border-radius:18px;background:rgba(12,14,36,.97);color:var(--text);padding:0;width:min(780px,calc(100vw - 24px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(120,100,255,.12);overflow:hidden}
+dialog.narrow{width:min(540px,calc(100vw - 24px))}
+dialog[open]{display:flex;animation:pop .18s ease-out}
+dialog::backdrop{background:rgba(2,3,10,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes sheet{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.dlg{display:flex;flex-direction:column;width:100%;min-height:0;max-height:inherit}
+.dlg-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 10px}
+.dlg-head h3{margin:0;font-size:18px;letter-spacing:.04em}
+.dlg-head .x{border:0;background:none;font-size:26px;line-height:1;padding:2px 10px;color:var(--muted);border-radius:8px}
+.dlg-head .x:hover{color:var(--text)}
+.dlg-form{display:flex;flex-direction:column;min-height:0;flex:1 1 auto}
+.dlg-body{overflow-y:auto;overscroll-behavior:contain;padding:4px 18px 14px;flex:1 1 auto;min-height:0;-webkit-overflow-scrolling:touch}
+.dlg-foot{padding:10px 18px 14px;padding-bottom:calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:rgba(20,24,58,.6)}
+.dlg-foot .btns{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.dlg h4{margin:20px 0 8px;font-size:12px;color:var(--cyan);text-transform:uppercase;letter-spacing:.14em;font-weight:700}
+.field{margin-bottom:12px}
+.field input,.field textarea,.field select{width:100%}
+.err{color:var(--danger);font-size:14px;min-height:0;margin:0 0 8px}
+.err:empty{display:none}
+.top-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;margin:0 -2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.chips button{flex:none;border-radius:999px;padding:5px 13px;font-size:14px;white-space:nowrap}
+.chips-label{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin:4px 0 6px}
+.glabels,.grow{display:grid;grid-template-columns:minmax(130px,1.3fr) minmax(160px,1.5fr) 88px 112px;gap:8px}
+.glabels{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin:6px 0 5px}
+.grow{margin-bottom:8px;align-items:start}
+.grow > *{min-width:0;width:100%}
+.c-in{width:100%}
+.grow::before{display:none}
+.hint2{font-size:12px;color:var(--muted);margin:3px 3px 0;min-height:16px}
+.hint2.new{color:var(--good)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin:10px 0}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:21px;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.big-elo{font-size:40px;font-weight:850;line-height:1;font-variant-numeric:tabular-nums;text-shadow:0 0 22px rgba(85,227,255,.45)}
+.head-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.who{display:flex;align-items:center;gap:14px;min-width:0}
+.who h3{margin:0 0 3px;font-size:22px;overflow-wrap:anywhere}
+.setrow{display:flex;gap:10px 22px;flex-wrap:wrap}
+.setrow label.chk{display:flex;align-items:center;gap:9px;color:var(--text);font-size:15px;margin:0}
+.box{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:14px}
+.box.warn{background:rgba(255,196,107,.1);border-color:rgba(255,196,107,.35);color:var(--warn)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+details{font-size:14px;color:var(--muted)}
+details summary{cursor:pointer;color:var(--text);margin-bottom:6px}
+details code{background:var(--field);border-radius:6px;padding:1px 6px;font-size:13px;color:var(--cyan)}
+.tbl{overflow-x:auto}
+.tbl table{width:100%;border-collapse:collapse}
+.tbl th,.tbl td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th.l,.tbl td.l{text-align:left}
+.tbl td.l{white-space:normal}
+.tbl thead th{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:650;background:rgba(60,68,140,.22)}
+.tbl tbody tr:last-child td{border-bottom:0}
+
+/* ---------- toast + bottom navigation ---------- */
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(8px);background:rgba(12,14,36,.97);border:1px solid var(--line2);color:var(--text);padding:11px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:calc(100vw - 28px);box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 24px rgba(85,227,255,.15);text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%)}
+#bnav{display:none}
+
+/* ================= phone / tablet (narrow screen) ================= */
+@media (max-width:940px){
+  .wrap{padding:0 14px}
+  header.top{position:static;background:transparent;border-bottom:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .top-row{padding-bottom:2px}
+  .brand svg{width:32px;height:32px}
+  .brand h1{font-size:15px;letter-spacing:.16em}
+  .brand small{font-size:9.5px;letter-spacing:.28em}
+  #tools-d,nav.tabs{display:none}
+  .status{padding-bottom:4px}
+  .only-m{display:inline-block}
+  .delta.only-m{display:inline-block}
+  .only-d{display:none!important}
+  main.wrap{padding-bottom:calc(var(--nav-h) + 36px + env(safe-area-inset-bottom))}
+  .bar{margin:14px 0 12px}
+  h2{font-size:17px}
+
+  /* bottom navigation */
+  #bnav{display:grid;grid-template-columns:1fr 1fr 74px 1fr 1fr;align-items:end;position:fixed;left:0;right:0;bottom:0;z-index:40;height:calc(var(--nav-h) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:rgba(8,10,28,.88);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--line2)}
+  #bnav.adm{grid-template-columns:1fr 1fr 74px 1fr 1fr 1fr}
+  #bnav.adm .bn{font-size:10px;letter-spacing:0}
+  #bnav .bn{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:var(--nav-h);background:none;border:0;border-radius:0;padding:4px 0;color:var(--muted);font-size:11px;letter-spacing:.04em;font-weight:600}
+  #bnav .bn svg{width:23px;height:23px}
+  #bnav .bn[aria-current="true"]{color:var(--cyan);text-shadow:0 0 12px rgba(85,227,255,.6)}
+  #bnav .bn .dot{position:absolute;top:7px;left:calc(50% + 8px);width:9px;height:9px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger)}
+  #bnav .fab{justify-self:center;align-self:start;width:60px;height:60px;margin-top:-20px;border-radius:50%;padding:0;display:grid;place-items:center;background:linear-gradient(135deg,#5be7ff,#8f7bff);border:3px solid #070819;color:#06101e;box-shadow:0 0 26px rgba(110,160,255,.55)}
+  #bnav .fab svg{width:28px;height:28px}
+  #toast{bottom:calc(var(--nav-h) + 22px + env(safe-area-inset-bottom))}
+
+  /* ranking as cards */
+  .lb{background:none;border:0;box-shadow:none;overflow:visible}
+  .lb-head{display:none}
+  .lb-grid{padding:12px 14px}
+  .lb-row{background:var(--panel);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;box-shadow:0 8px 26px rgba(0,0,0,.3)}
+  .lb-row:last-child{border-bottom:1px solid var(--line)}
+  .lb-grid.ranking{grid-template-columns:46px minmax(0,1fr) auto;grid-template-areas:"r n e" "r s s";row-gap:3px}
+  .lb-grid.ranking .c-rank{grid-area:r;align-self:center}
+  .lb-grid.ranking .c-name{grid-area:n;font-size:17px}
+  .lb-grid.ranking .c-elo{grid-area:e;display:flex;align-items:center;gap:8px}
+  .lb-grid.ranking .c-sum{grid-area:s;display:block;text-align:left;white-space:normal;color:var(--muted);font-size:13.5px}
+  .lb-grid.ranking .c-last,.lb-grid.ranking .c-games,.lb-grid.ranking .c-wins,.lb-grid.ranking .c-losses,.lb-grid.ranking .c-pct,.lb-grid.ranking .c-avg,.lb-grid.ranking .c-fav{display:none}
+  .lb-grid.factions{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n p" "b b" "s s";row-gap:2px}
+  .lb-grid.factions .c-bar{display:block;grid-area:b}
+  .lb-grid.factions .c-name .wbar{display:none}
+  .lb-grid.factions .c-name{grid-area:n;white-space:normal}
+  .lb-grid.factions .c-pct{grid-area:p;font-weight:800;font-size:17px;align-self:start}
+  .lb-grid.factions .c-sum{grid-area:s;display:block;text-align:left;white-space:normal;color:var(--muted);font-size:13.5px}
+  .lb-grid.factions .c-games,.lb-grid.factions .c-wins,.lb-grid.factions .c-avg,.lb-grid.factions .c-place{display:none}
+
+  /* games */
+  .game{padding:12px}
+  .pv{grid-template-columns:24px minmax(0,1fr) auto;grid-template-areas:"p n pts" ". f e";row-gap:1px;padding:8px 8px}
+  .pl-place{grid-area:p;align-self:start;padding-top:1px}.pl-name{grid-area:n;font-size:16px}.pl-pts{grid-area:pts;font-size:16px}.pl-fac{grid-area:f}.pl-elo{grid-area:e}
+  .filters{gap:8px;padding:10px}
+  .filters > div{flex:1 1 44%}
+
+  /* dialogs = bottom sheets */
+  dialog,dialog.narrow{width:100%;max-width:100%;margin:auto 0 0 0;border-radius:20px 20px 0 0;border-left:0;border-right:0;border-bottom:0;max-height:94vh;max-height:94dvh}
+  dialog[open]{animation:sheet .22s ease-out}
+  dialog#dlg[data-kind="game"]{height:94dvh}
+  .dlg-head{padding:14px 16px 8px;position:relative}
+  .dlg-head::before{content:"";position:absolute;top:6px;left:50%;width:42px;height:4px;margin-left:-21px;border-radius:2px;background:var(--line2)}
+  .dlg-body{padding:2px 14px 12px}
+  .dlg-foot{padding:10px 14px calc(12px + env(safe-area-inset-bottom))}
+  .dlg-foot .btns > button{flex:1 1 0}
+  .glabels{display:none}
+  .grow{grid-template-columns:1fr 1fr;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px;position:relative}
+  .grow::before{display:block;content:attr(data-n);grid-column:1/-1;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);font-weight:700}
+  .grow .c-name,.grow select[name=fc]{grid-column:1/-1}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stat b{font-size:19px}
+  .big-elo{font-size:34px}
+  .tbl th,.tbl td{padding:8px 8px;font-size:13.5px}
+}
+@media (max-width:380px){
+  .brand h1{font-size:13px;letter-spacing:.12em}
+  .top-fields{grid-template-columns:1fr}
+}
+@media (pointer:coarse){
+  button,select,input:not([type=checkbox]){min-height:44px}
+  button.small{min-height:38px}
+  .status button{min-height:30px}
+}
+</style>
+</head>
+<body>
+<div class="space"></div>
+<div class="hexgrid"></div>
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5be7ff"/><stop offset="1" stop-color="#9b8cff"/></linearGradient></defs><circle cx="16" cy="16" r="7" fill="url(#lg)"/><ellipse cx="16" cy="16" rx="14" ry="5" fill="none" stroke="url(#lg)" stroke-width="1.7" transform="rotate(-20 16 16)"/><circle cx="27" cy="5.5" r="1.5" fill="#fff"/><circle cx="4.5" cy="26.5" r="1" fill="#fff" opacity=".7"/></svg>
+        <div><h1>Twilight Imperium</h1><small>4th Edition</small></div>
+      </div>
+      <div class="tools" id="tools-d"></div>
+    </div>
+    <div class="status" id="status"></div>
+    <nav class="tabs" id="tabs"></nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<nav id="bnav" aria-label="Navigation"></nav>
+<dialog id="dlg"></dialog>
+<input type="file" id="file" accept=".json,application/json" hidden>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+/* =========================================================
+   CONSTANTS: factions and elo
+   ========================================================= */
+const START_ELO = 1000, DEFAULT_K = 48;
+/* where the app talks to (set these two lines to your own addresses) */
+const CFG = { API: 'https://nostromo.aleksi-ogi.workers.dev', HOME: 'https://zazibu.github.io/nostromo/' };
+const API_URL = String(window.NOSTROMO_API || CFG.API).replace(/\/+$/, '');
+const HOME_URL = String(window.NOSTROMO_HOME || CFG.HOME || '').replace(/\/?$/, '/');
+
+const GROUPS = { base: 'Base game', pok: 'Prophecy of Kings', codex: 'Codex', te: "Thunder's Edge" };
+const FACTIONS = [
+  ['arborec', 'The Arborec', 'Arborec', 'base'], ['letnev', 'The Barony of Letnev', 'Barony of Letnev', 'base'],
+  ['saar', 'The Clan of Saar', 'Clan of Saar', 'base'], ['muaat', 'The Embers of Muaat', 'Embers of Muaat', 'base'],
+  ['hacan', 'The Emirates of Hacan', 'Emirates of Hacan', 'base'], ['sol', 'The Federation of Sol', 'Federation of Sol', 'base'],
+  ['creuss', 'The Ghosts of Creuss', 'Ghosts of Creuss', 'base'], ['l1z1x', 'The L1Z1X Mindnet', 'L1Z1X Mindnet', 'base'],
+  ['mentak', 'The Mentak Coalition', 'Mentak Coalition', 'base'], ['naalu', 'The Naalu Collective', 'Naalu Collective', 'base'],
+  ['nekro', 'The Nekro Virus', 'Nekro Virus', 'base'], ['sardakk', "Sardakk N'orr", "Sardakk N'orr", 'base'],
+  ['jolnar', 'The Universities of Jol-Nar', 'Jol-Nar', 'base'], ['winnu', 'The Winnu', 'Winnu', 'base'],
+  ['xxcha', 'The Xxcha Kingdom', 'Xxcha Kingdom', 'base'], ['yin', 'The Yin Brotherhood', 'Yin Brotherhood', 'base'],
+  ['yssaril', 'The Yssaril Tribes', 'Yssaril Tribes', 'base'],
+  ['argent', 'The Argent Flight', 'Argent Flight', 'pok'], ['empyrean', 'The Empyrean', 'Empyrean', 'pok'],
+  ['mahact', 'The Mahact Gene-Sorcerers', 'Mahact', 'pok'], ['naazrokha', 'The Naaz-Rokha Alliance', 'Naaz-Rokha', 'pok'],
+  ['nomad', 'The Nomad', 'Nomad', 'pok'], ['titans', 'The Titans of Ul', 'Titans of Ul', 'pok'],
+  ['vuilraith', "The Vuil'Raith Cabal", "Vuil'Raith", 'pok'],
+  ['keleres', 'The Council Keleres', 'Council Keleres', 'codex'],
+  ['crimson', 'The Crimson Rebellion', 'Crimson Rebellion', 'te'], ['deepwrought', 'The Deepwrought Scholarate', 'Deepwrought', 'te'],
+  ['firmament', 'The Firmament / The Obsidian', 'Firmament/Obsidian', 'te'], ['lastbastion', 'Last Bastion', 'Last Bastion', 'te'],
+  ['ralnel', 'The Ral Nel Consortium', 'Ral Nel', 'te']
+].map(([id, name, short, g]) => ({ id, name, short, g, sort: name.replace(/^The /, '') }));
+const FMAP = Object.fromEntries(FACTIONS.map(f => [f.id, f]));
+const facName = id => FMAP[id]?.name || (id ? id : '—');
+const facShort = id => FMAP[id]?.short || (id ? id : '—');
+
+const ICON = {
+  trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg>',
+  list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>',
+  planet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="10.5" ry="3.6" transform="rotate(-24 12 12)"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  inbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l2.6-8h10.8L20 13v6H4v-6zM4 13h4.6l1 2.4h4.8l1-2.4H20"/></svg>',
+  sliders: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h8M18 7h2M4 12h2M12 12h8M4 17h9M19 17h1"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="16" cy="17" r="2"/></svg>'
+};
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const pad = n => String(n).padStart(2, '0');
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const fmtDate = s => { if (!/^\d{4}-\d{2}-\d{2}$/.test(s || '')) return s || ''; const [y, m, d] = s.split('-'); return Number(d) + ' ' + MONTHS[Number(m) - 1] + ' ' + y; };
+const fmtTs = t => { const d = new Date(t); return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear() + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const fmtNum = (n, dec = 1) => (n == null || isNaN(n)) ? '—' : String(Number(n.toFixed(dec)));
+const norm = s => String(s || '').replace(/\s+/g, ' ').trim();
+const key = s => norm(s).toLowerCase();
+const byName = (a, b) => a.localeCompare(b, 'en');
+const enc = encodeURIComponent;
+const deltaHTML = (d, cls = '') => d == null ? '' : `<span class="delta ${d > 0 ? 'up' : d < 0 ? 'down' : 'zero'} ${cls}">${d > 0 ? '+' : d < 0 ? '−' : '±'}${Math.abs(d)}</span>`;
+const hexHTML = (txt, r, big) => `<span class="hexw ${r && r <= 3 ? 'g' + r : ''}"><span class="hex ${big ? 'big' : ''}">${esc(txt)}</span></span>`;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 3800); }
+
+/* ---- stars ---- */
+(function stars() {
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const cols = ['255,255,255', '255,255,255', '190,215,255', '255,236,200', '200,190,255'];
+  const layer = (cls, n, size, aMin) => {
+    const el = document.createElement('div'); el.className = 'stars ' + cls; el.setAttribute('aria-hidden', 'true');
+    const sh = []; for (let i = 0; i < n; i++) sh.push(`${rnd(0, 100).toFixed(2)}vw ${rnd(0, 100).toFixed(2)}vh 0 ${rnd(0, size).toFixed(2)}px rgba(${cols[Math.floor(Math.random() * cols.length)]},${rnd(aMin, 1).toFixed(2)})`);
+    el.style.boxShadow = sh.join(','); document.body.prepend(el);
+  };
+  layer('', 130, .5, .3); layer('tw', 34, .9, .5); layer('tw2', 22, 1.2, .6);
+})();
+
+/* =========================================================
+   DATA, NETWORK AND SESSION
+   The database lives in the GitHub repository (data.json) and is served by the Worker.
+   The app only displays it and keeps a cached copy, so it still works when the Worker is down.
+   ========================================================= */
+const ls = {
+  get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (_) {} }
+};
+const CACHE_KEY = 'nostromo-cache-v1', TOKEN_KEY = 'nostromo-admin', PREF_KEY = 'nostromo-prefs', NAME_KEY = 'nostromo-name';
+
+/* personal display preference (this device only): which factions appear in the dropdown */
+const prefs = (() => {
+  const p = { groups: { base: true, pok: true, codex: true, te: true } };
+  try { const s = JSON.parse(ls.get(PREF_KEY) || '{}'); for (const g of Object.keys(GROUPS)) if (s.groups && s.groups[g] === false) p.groups[g] = false; } catch (_) {}
+  return p;
+})();
+const groups = () => prefs.groups;
+const savePrefs = () => ls.set(PREF_KEY, JSON.stringify(prefs));
+
+const emptyDB = () => ({ rev: '', updatedAt: 0, players: [], games: [], pending: [], settings: { k: DEFAULT_K } });
+function sanitize(d) {
+  if (!d || typeof d !== 'object' || !Array.isArray(d.players) || !Array.isArray(d.games)) throw new Error('Invalid data format.');
+  const out = emptyDB();
+  out.rev = String(d.rev ?? ''); out.updatedAt = Number(d.updatedAt) || 0;
+  out.players = d.players.filter(p => p && p.id && typeof p.name === 'string' && norm(p.name))
+    .map(p => ({ id: String(p.id), name: norm(p.name), createdAt: Number(p.createdAt) || Date.now() }));
+  out.games = d.games.filter(g => g && g.id && Array.isArray(g.participants)).map(g => ({
+    id: String(g.id), date: String(g.date || ''), note: String(g.note || ''), createdAt: Number(g.createdAt) || Date.now(),
+    participants: g.participants.filter(x => x && x.playerId).map(x => ({
+      playerId: String(x.playerId), faction: String(x.faction || ''),
+      points: Number.isFinite(Number(x.points)) ? Number(x.points) : 0, result: x.result === 'W' ? 'W' : 'L'
+    }))
+  }));
+  const k = Number(d.settings && d.settings.k);
+  out.settings.k = (Number.isFinite(k) && k >= 1 && k <= 200) ? k : DEFAULT_K;
+  if (Array.isArray(d.pending)) out.pending = d.pending.filter(p => p && p.id && Array.isArray(p.participants)).map(p => ({
+    id: String(p.id), createdAt: Number(p.createdAt) || 0, submitter: norm(p.submitter), date: String(p.date || ''), note: String(p.note || ''),
+    participants: p.participants.map(x => ({ name: norm(x && x.name), faction: String((x && x.faction) || ''), points: Number(x && x.points) || 0, result: x && x.result === 'W' ? 'W' : 'L' }))
+  }));
+  return out;
+}
+const hasData = d => d.players.length > 0 || d.games.length > 0;
+
+let db = (() => { try { const raw = ls.get(CACHE_KEY); if (raw) return sanitize(JSON.parse(raw)); } catch (_) {} return emptyDB(); })();
+let eloCache = null, dataVersion = 0;
+function applyState(s) {
+  db = sanitize(s); eloCache = null; dataVersion++;
+  ls.set(CACHE_KEY, JSON.stringify({ rev: db.rev, updatedAt: db.updatedAt, players: db.players, games: db.games, settings: db.settings }));
+}
+
+/* ---- session ---- */
+const sess = { token: ls.get(TOKEN_KEY) || '', admin: false, source: 'boot', checkedAt: 0, liveRev: '', busy: false, pendingSeen: null };
+sess.admin = !!sess.token;
+
+class ApiErr extends Error { constructor(msg, status, code, net) { super(msg); this.status = status; this.code = code || ''; this.net = !!net; } }
+async function fetchT(url, opt, ms) {
+  const c = new AbortController(), t = setTimeout(() => c.abort(), ms || 10000);
+  try { return await fetch(url, Object.assign({}, opt, { signal: c.signal })); } finally { clearTimeout(t); }
+}
+function dropAdmin() { sess.token = ''; sess.admin = false; sess.liveRev = ''; sess.pendingSeen = null; ls.del(TOKEN_KEY); db.pending = []; }
+async function api(method, path, body, extra) {
+  const headers = {};
+  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (sess.token) headers.Authorization = 'Bearer ' + sess.token;
+  if (extra && extra.code) headers['X-Group-Code'] = enc(extra.code);
+  let r;
+  try { r = await fetchT(API_URL + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), cache: 'no-store' }, 15000); }
+  catch (_) { throw new ApiErr('The server is currently unavailable.', 0, 'off', true); }
+  let j = null; try { j = await r.json(); } catch (_) {}
+  if (!j || typeof j !== 'object') throw new ApiErr('The server is currently unavailable.', r.status, 'off', true);
+  if (!r.ok) {
+    if (r.status === 401 && j.code === 'admin') { dropAdmin(); render(); }
+    throw new ApiErr(j.error || ('Error (' + r.status + ')'), r.status, j.code);
+  }
+  return j;
+}
+/* fallback copy: the same data.json, published by GitHub Pages */
+async function fetchSnapshot() {
+  const r = await fetchT(HOME_URL + 'data.json?t=' + Date.now(), { cache: 'no-store' }, 8000);
+  if (!r.ok) throw new Error('snapshot ' + r.status);
+  return sanitize(await r.json());
+}
+/* admin actions: the server answers with the new full state */
+async function adminCall(method, path, body) {
+  const j = await api(method, path, body);
+  if (j && j.state) { applyState(j.state); sess.liveRev = j.state.rev; sess.source = 'live'; sess.checkedAt = Date.now(); sess.pendingSeen = db.pending.length; }
+  return j;
+}
+
+async function refresh(o = {}) {
+  if (sess.busy) return; sess.busy = true;
+  const v0 = dataVersion, src0 = sess.source, adm0 = sess.admin;
+  try {
+    try {
+      const s = await api('GET', '/api/state?rev=' + enc(sess.liveRev));
+      sess.source = 'live'; sess.checkedAt = Date.now();
+      if (!s.unchanged) { applyState(s); sess.liveRev = s.rev; }
+      sess.admin = !!s.admin;
+      if (sess.token && !s.admin) { dropAdmin(); toast('Your admin login has expired. Please log in again.'); }
+      if (sess.admin) { const n = db.pending.length; if (sess.pendingSeen != null && n > sess.pendingSeen) toast('New game request (' + n + ' waiting).'); sess.pendingSeen = n; }
+      else sess.pendingSeen = null;
+    } catch (e) {
+      if (!e.net) throw e;
+      sess.source = 'cache'; sess.liveRev = '';
+      try {
+        const sn = await fetchSnapshot();
+        if (sn.updatedAt > db.updatedAt || (!hasData(db) && hasData(sn))) applyState(sn);
+        sess.source = 'snapshot';
+      } catch (_) {}
+      if (o.toast) toast('The server is currently unavailable.');
+    }
+  } catch (e) { if (o.toast) toast(e.message); }
+  finally { sess.busy = false; }
+  if (dataVersion !== v0 || sess.source !== src0 || sess.admin !== adm0) render(); else renderChrome();
+  refreshDataDialog();
+}
+
+/* =========================================================
+   ELO
+   Every game is a set of head-to-head "duels" (everyone against everyone).
+   Ranking: the winner is first, the others by points (equal points = shared place).
+   E = 1 / (1 + 10^((Rb - Ra)/400));  S = 1 (better) | 0.5 (equal) | 0 (worse)
+   change_a = K/(N-1) * sum_b (S_ab - E_ab)    -> the changes in one game add up to 0
+   ========================================================= */
+function computeElo() {
+  const K = db.settings.k;
+  const pl = new Map(db.players.map(p => [p.id, { id: p.id, name: p.name, rating: START_ELO, peak: START_ELO, games: 0, wins: 0, pts: 0, placeSum: 0, lastDelta: null, factions: new Map(), history: [] }]));
+  const fac = new Map(); const byGame = {};
+  const ordered = [...db.games].sort((a, b) => a.date.localeCompare(b.date) || a.createdAt - b.createdAt);
+  const bump = (m, k, x) => { let e = m.get(k); if (!e) { e = { games: 0, wins: 0, pts: 0, placeSum: 0 }; m.set(k, e); } e.games++; if (x.win) e.wins++; e.pts += x.pts; e.placeSum += x.place; };
+  for (const g of ordered) {
+    const ps = g.participants.filter(x => pl.has(x.playerId));
+    const n = ps.length;
+    if (n < 2) { byGame[g.id] = new Map(); continue; }
+    const tier = x => x.result === 'W' ? 0 : 1;
+    const cmp = (a, b) => tier(a) !== tier(b) ? (tier(a) < tier(b) ? 1 : 0) : (a.points > b.points ? 1 : a.points < b.points ? 0 : 0.5);
+    const deltas = ps.map(a => {
+      let s = 0; const Ra = pl.get(a.playerId).rating;
+      for (const b of ps) { if (b === a) continue; const E = 1 / (1 + Math.pow(10, (pl.get(b.playerId).rating - Ra) / 400)); s += cmp(a, b) - E; }
+      return K / (n - 1) * s;
+    });
+    const map = new Map();
+    ps.forEach((a, i) => {
+      const p = pl.get(a.playerId);
+      const place = 1 + ps.filter(b => b !== a && cmp(b, a) === 1).length;
+      const before = p.rating, after = before + deltas[i];
+      const d = Math.round(after) - Math.round(before);
+      p.rating = after; p.peak = Math.max(p.peak, after); p.games++; p.pts += a.points; p.placeSum += place; p.lastDelta = d;
+      const win = a.result === 'W'; if (win) p.wins++;
+      p.history.push({ gameId: g.id, date: g.date, rating: after, delta: d, place, n, faction: a.faction, points: a.points, win });
+      bump(p.factions, a.faction, { win, pts: a.points, place });
+      bump(fac, a.faction, { win, pts: a.points, place });
+      map.set(a.playerId, { before, after, delta: d, place, n });
+    });
+    byGame[g.id] = map;
+  }
+  return { players: pl, factions: fac, byGame };
+}
+const elo = () => eloCache || (eloCache = computeElo());
+
+/* =========================================================
+   VIEW STATE
+   ========================================================= */
+const state = { tab: 'ranking', sort: { key: 'rating', dir: -1 }, fsort: { key: 'games', dir: -1 }, filters: { player: '', faction: '', from: '', to: '' } };
+const app = $('#app'), dlg = $('#dlg');
+const ascKey = k => k === 'name' || k === 'avgPlace';
+
+function statusHTML() {
+  const who = sess.admin ? '<b>Admin</b> · ' : '';
+  const stamp = db.updatedAt ? fmtTs(db.updatedAt) : '';
+  if (sess.source === 'live') return { cls: 'status', html: `<span>${who}<i class="live"></i>Live${sess.checkedAt ? ' · updated ' + fmtTs(sess.checkedAt).slice(-5) : ''}</span> <button class="small" data-a="refresh">Refresh</button>` };
+  if (sess.source === 'boot') return { cls: 'status', html: `<span>${who}Connecting to the server…</span>` };
+  const msg = sess.source === 'snapshot' ? 'The server is unavailable, showing the last published data' : 'The server is unavailable, showing the last saved data';
+  return { cls: 'status warn', html: `<span>${who}${msg}${stamp ? ' (' + esc(stamp) + ')' : ''}.</span> <button data-a="refresh">Try again</button>` };
+}
+function renderChrome() {
+  const admin = sess.admin, np = db.pending.length;
+  $('#tools-d').innerHTML = `<button class="primary" data-a="new-game">${admin ? '+ New game' : 'Submit a game'}</button><button data-a="data">${admin ? 'Data &amp; settings' : 'Settings'}</button>`;
+  const st = statusHTML(); const el = $('#status'); el.className = st.cls; el.innerHTML = st.html;
+  const tabs = [['ranking', 'Ranking', ICON.trophy], ['games', 'Games', ICON.list], ['factions', 'Factions', ICON.planet]];
+  if (admin) tabs.push(['requests', 'Requests', ICON.inbox]);
+  const badge = k => k === 'requests' && np ? `<span class="badge">${np}</span>` : '';
+  $('#tabs').innerHTML = tabs.map(([k, l, i]) => `<button data-a="tab" data-id="${k}" aria-current="${state.tab === k}">${i}${l}${badge(k)}</button>`).join('');
+  const bn = ([k, l, i]) => `<button class="bn" data-a="tab" data-id="${k}" aria-current="${state.tab === k}">${i}<span>${l}</span>${k === 'requests' && np ? '<i class="dot"></i>' : ''}</button>`;
+  const nb = $('#bnav'); nb.className = admin ? 'adm' : '';
+  nb.innerHTML = bn(tabs[0]) + bn(tabs[1]) + `<button class="fab" data-a="new-game" aria-label="${admin ? 'New game' : 'Submit a game'}">${ICON.plus}</button>` + bn(tabs[2]) + (admin ? bn(tabs[3]) : '') +
+    `<button class="bn" data-a="data" aria-label="${admin ? 'Data and settings' : 'Settings'}">${ICON.sliders}<span>${admin ? 'Data' : 'Settings'}</span></button>`;
+}
+
+function eloRankMap() {
+  const E = elo(); const list = [...E.players.values()].filter(p => p.games > 0).sort((a, b) => b.rating - a.rating || b.games - a.games || byName(a.name, b.name));
+  return new Map(list.map((p, i) => [p.id, i + 1]));
+}
+function topFaction(p) {
+  let best = null;
+  for (const [id, s] of p.factions) if (!best || s.games > best[1].games || (s.games === best[1].games && s.wins > best[1].wins)) best = [id, s];
+  return best ? best[0] : null;
+}
+const hcell = (tab, k, label, left) => { const s = tab === 'factions' ? state.fsort : state.sort; return `<button class="hcell ${left ? 'l' : ''} ${s.key === k ? 'on' : ''}" data-a="sort" data-tab="${tab}" data-key="${k}">${label}${s.key === k ? (s.dir > 0 ? ' ▲' : ' ▼') : ''}</button>`; };
+const sortSelect = (tab, opts) => { const s = tab === 'factions' ? state.fsort : state.sort; return `<select class="only-m" data-sortsel="${tab}" aria-label="Sort by">${opts.map(([k, l]) => `<option value="${k}" ${s.key === k ? 'selected' : ''}>↕ ${l}</option>`).join('')}</select>`; };
+const emptyPlanet = '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="32" cy="32" r="13"/><ellipse cx="32" cy="32" rx="28" ry="9" transform="rotate(-22 32 32)"/><circle cx="54" cy="10" r="1.6" fill="currentColor"/><circle cx="9" cy="52" r="1.2" fill="currentColor"/></svg>';
+const newGameLabel = () => sess.admin ? '+ New game' : 'Submit a game';
+const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
+
+function viewRanking() {
+  const E = elo(), rank = eloRankMap();
+  const rows = [...E.players.values()].map(p => ({ ...p, pct: p.games ? p.wins / p.games : null, avgPts: p.games ? p.pts / p.games : null, losses: p.games - p.wins, fav: topFaction(p) }));
+  const { key: k, dir } = state.sort;
+  rows.sort((a, b) => {
+    if (k === 'name') { const c = byName(a.name, b.name) * dir; if (c) return c; }
+    else { const va = a[k] ?? Infinity * dir, vb = b[k] ?? Infinity * dir; if (va !== vb) return (va - vb) * dir; }
+    return b.rating - a.rating || byName(a.name, b.name);
+  });
+  const head = `<div class="bar"><h2>Ranking <span class="muted">· ${plural(rows.length, 'player', 'players')} · ${plural(db.games.length, 'game', 'games')}</span></h2>
+    <div class="right">${sortSelect('ranking', [['rating', 'ELO'], ['wins', 'Wins'], ['pct', 'Win %'], ['games', 'Games'], ['avgPts', 'Avg. points'], ['name', 'Name']])}${sess.admin ? '<button class="small" data-a="new-player">+ New player</button>' : ''}</div></div>`;
+  if (!rows.length) return head + `<div class="card empty">${emptyPlanet}<p>The galaxy is empty. ${sess.admin ? 'Players are saved automatically when you add them to a game.' : 'No games have been entered yet.'}</p><button class="primary" data-a="new-game">${newGameLabel()}</button></div>`;
+  return head + `<div class="card lb">
+    <div class="lb-grid ranking lb-head"><span class="c-rank">#</span>${hcell('ranking', 'name', 'Player', true)}${hcell('ranking', 'rating', 'ELO')}${hcell('ranking', 'lastDelta', 'Last')}${hcell('ranking', 'games', 'Games')}${hcell('ranking', 'wins', 'Wins')}${hcell('ranking', 'losses', 'Losses')}${hcell('ranking', 'pct', 'Win %')}${hcell('ranking', 'avgPts', 'Avg. points')}<span class="hcell l" style="text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:650">Favourite faction</span></div>
+    ${rows.map(p => { const r = rank.get(p.id); return `<div class="lb-grid ranking lb-row click" data-a="profile" data-id="${esc(p.id)}" role="button" tabindex="0">
+      <div class="c-rank">${hexHTML(r || '–', r)}</div>
+      <div class="c-name">${esc(p.name)}</div>
+      <div class="c-elo"><span class="elo">${Math.round(p.rating)}</span>${deltaHTML(p.lastDelta, 'only-m')}</div>
+      <div class="c-last">${deltaHTML(p.lastDelta)}</div>
+      <div class="c-games">${p.games}</div><div class="c-wins">${p.wins}</div><div class="c-losses">${p.losses}</div>
+      <div class="c-pct">${p.pct == null ? '—' : Math.round(p.pct * 100) + '%'}</div><div class="c-avg">${fmtNum(p.avgPts)}</div>
+      <div class="c-fav">${p.fav ? esc(facShort(p.fav)) : '—'}</div>
+      <div class="c-sum">${p.games ? `${plural(p.games, 'game', 'games')} · ${plural(p.wins, 'win', 'wins')} · ${plural(p.losses, 'loss', 'losses')} · ${Math.round(p.pct * 100)}%${p.fav ? ' · ' + esc(facShort(p.fav)) : ''}` : 'No games played'}</div></div>`; }).join('')}</div>
+    <p class="hint">Tap a player to see their profile. Every new player starts with ${START_ELO} elo points.</p>`;
+}
+
+function filteredGames() {
+  const f = state.filters;
+  return db.games.filter(g => (!f.player || g.participants.some(p => p.playerId === f.player)) && (!f.faction || g.participants.some(p => p.faction === f.faction)) && (!f.from || g.date >= f.from) && (!f.to || g.date <= f.to))
+    .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt);
+}
+function viewGames() {
+  const E = elo(), pm = Object.fromEntries(db.players.map(p => [p.id, p])), f = state.filters;
+  const list = filteredGames();
+  const pl = db.players.slice().sort((a, b) => byName(a.name, b.name));
+  const usedFac = [...new Set(db.games.flatMap(g => g.participants.map(x => x.faction)).filter(Boolean))].sort((a, b) => byName(facName(a), facName(b)));
+  const head = `<div class="bar"><h2>Games <span class="muted">· ${list.length}${list.length !== db.games.length ? ' of ' + db.games.length : ''}</span></h2></div>`;
+  if (!db.games.length) return head + `<div class="card empty">${emptyPlanet}<p>No games have been entered yet.</p><button class="primary" data-a="new-game">${newGameLabel()}</button></div>`;
+  const filters = `<div class="filters">
+    <div><label>Player</label><select data-filter="player"><option value="">All</option>${pl.map(p => `<option value="${esc(p.id)}" ${f.player === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></div>
+    <div><label>Faction</label><select data-filter="faction"><option value="">All</option>${usedFac.map(x => `<option value="${esc(x)}" ${f.faction === x ? 'selected' : ''}>${esc(facName(x))}</option>`).join('')}</select></div>
+    <div><label>From date</label><input type="date" data-filter="from" value="${esc(f.from)}"></div>
+    <div><label>To date</label><input type="date" data-filter="to" value="${esc(f.to)}"></div>
+    ${(f.player || f.faction || f.from || f.to) ? `<div style="flex:0 0 auto;min-width:0"><button data-a="clear-filters">Clear</button></div>` : ''}</div>`;
+  if (!list.length) return head + filters + `<div class="card empty"><p>No games match the filters.</p></div>`;
+  return head + filters + list.map(g => {
+    const em = E.byGame[g.id] || new Map();
+    const parts = g.participants.slice().sort((a, b) => (em.get(a.playerId)?.place ?? 99) - (em.get(b.playerId)?.place ?? 99) || byName(pm[a.playerId]?.name || '', pm[b.playerId]?.name || ''));
+    return `<article class="card game">
+      <div class="game-head"><div><strong>${esc(fmtDate(g.date))}</strong> <span class="tag">${g.participants.length} players</span></div>
+        ${sess.admin ? `<div class="actions"><button class="small" data-a="edit-game" data-id="${esc(g.id)}">Edit</button><button class="small danger" data-a="del-game" data-id="${esc(g.id)}">Delete</button></div>` : ''}</div>
+      ${parts.map(x => { const e = em.get(x.playerId); return `<div class="pv ${x.result === 'W' ? 'win' : ''}">
+        <span class="pl-place">${e ? e.place + '.' : '–'}</span>
+        <span class="pl-name">${esc(pm[x.playerId]?.name || '(unknown player)')}</span>
+        <span class="pl-fac" title="${esc(facName(x.faction))}">${esc(facShort(x.faction))}</span>
+        <span class="pl-pts">${esc(x.points)}<small> p</small></span>
+        <span class="pl-elo">${e ? Math.round(e.before) + ' → ' + Math.round(e.after) + ' ' + deltaHTML(e.delta) : ''}</span></div>`; }).join('')}
+      ${g.note ? `<p class="note">${esc(g.note)}</p>` : ''}</article>`;
+  }).join('');
+}
+
+function viewFactions() {
+  const E = elo();
+  const rows = FACTIONS.filter(f => groups()[f.g] || E.factions.has(f.id)).map(f => {
+    const s = E.factions.get(f.id) || { games: 0, wins: 0, pts: 0, placeSum: 0 };
+    return { id: f.id, name: f.name, g: f.g, games: s.games, wins: s.wins, pct: s.games ? s.wins / s.games : null, avgPts: s.games ? s.pts / s.games : null, avgPlace: s.games ? s.placeSum / s.games : null };
+  });
+  for (const id of E.factions.keys()) if (!FMAP[id]) { const s = E.factions.get(id); rows.push({ id, name: id || '(no faction)', g: '', games: s.games, wins: s.wins, pct: s.wins / s.games, avgPts: s.pts / s.games, avgPlace: s.placeSum / s.games }); }
+  const { key: k, dir } = state.fsort;
+  rows.sort((a, b) => {
+    if (k === 'name') { const c = byName(a.name, b.name) * dir; if (c) return c; }
+    else { const va = a[k] ?? Infinity * dir, vb = b[k] ?? Infinity * dir; if (va !== vb) return (va - vb) * dir; }
+    return b.games - a.games || byName(a.name, b.name);
+  });
+  return `<div class="bar"><h2>Faction statistics <span class="muted">· ${plural(db.games.length, 'game', 'games')}</span></h2>
+    <div class="right">${sortSelect('factions', [['games', 'Played'], ['wins', 'Wins'], ['pct', 'Win %'], ['avgPts', 'Avg. points'], ['avgPlace', 'Avg. place'], ['name', 'Name']])}</div></div>
+    <div class="card lb">
+    <div class="lb-grid factions lb-head">${hcell('factions', 'name', 'Faction', true)}${hcell('factions', 'games', 'Played')}${hcell('factions', 'wins', 'Wins')}${hcell('factions', 'pct', 'Win %')}${hcell('factions', 'avgPts', 'Avg. points')}${hcell('factions', 'avgPlace', 'Avg. place')}</div>
+    ${rows.map(r => `<div class="lb-grid factions lb-row">
+      <div class="c-name"><div class="fname"><b>${esc(r.name)}</b><span class="tag g-${esc(r.g)}">${esc(GROUPS[r.g] || '')}</span></div><div class="wbar"><i style="width:${r.pct == null ? 0 : Math.round(r.pct * 100)}%"></i></div></div>
+      <div class="c-bar"><div class="wbar"><i style="width:${r.pct == null ? 0 : Math.round(r.pct * 100)}%"></i></div></div>
+      <div class="c-games">${r.games}</div><div class="c-wins">${r.wins}</div><div class="c-pct">${r.pct == null ? '—' : Math.round(r.pct * 100) + '%'}</div>
+      <div class="c-avg">${fmtNum(r.avgPts)}</div><div class="c-place">${fmtNum(r.avgPlace)}</div>
+      <div class="c-sum">${r.games ? `${r.games} played · ${plural(r.wins, 'win', 'wins')} · Ø ${fmtNum(r.avgPts)} p · Ø place ${fmtNum(r.avgPlace)}` : 'Not played yet'}</div></div>`).join('')}</div>
+    <p class="hint">Average place: 1 = always wins. With few games the percentages don't mean much. You can hide expansion factions you don't use in Settings (this device only).</p>`;
+}
+
+function viewRequests() {
+  const list = db.pending.slice().sort((a, b) => a.createdAt - b.createdAt);
+  const known = new Set(db.players.map(p => key(p.name)));
+  const head = `<div class="bar"><h2>Pending requests <span class="muted">· ${list.length}</span></h2></div>`;
+  if (!list.length) return head + `<div class="card empty">${emptyPlanet}<p>No requests are waiting. When someone submits a game, it will show up here.</p></div>`;
+  return head + list.map(g => {
+    const parts = g.participants.slice().sort((a, b) => (b.result === 'W') - (a.result === 'W') || b.points - a.points || byName(a.name, b.name));
+    return `<article class="card game">
+      <div class="game-head"><div><strong>${esc(fmtDate(g.date))}</strong> <span class="tag">${g.participants.length} players</span> <span class="tag">${g.submitter ? 'from: ' + esc(g.submitter) + ' · ' : ''}${esc(fmtTs(g.createdAt))}</span></div>
+        <div class="actions"><button class="small primary" data-a="approve" data-id="${esc(g.id)}">Approve</button><button class="small" data-a="edit-pending" data-id="${esc(g.id)}">Edit</button><button class="small danger" data-a="reject" data-id="${esc(g.id)}">Reject</button></div></div>
+      ${parts.map((x, i) => `<div class="pv ${x.result === 'W' ? 'win' : ''}">
+        <span class="pl-place">${i + 1}.</span>
+        <span class="pl-name">${esc(x.name)}${known.has(key(x.name)) ? '' : ' <span class="tag g-codex">new</span>'}</span>
+        <span class="pl-fac" title="${esc(facName(x.faction))}">${esc(facShort(x.faction))}</span>
+        <span class="pl-pts">${esc(x.points)}<small> p</small></span><span class="pl-elo"></span></div>`).join('')}
+      ${g.note ? `<p class="note">${esc(g.note)}</p>` : ''}</article>`;
+  }).join('') + `<p class="hint">“Approve” saves the game as it was submitted. “Edit” lets you correct it first.</p>`;
+}
+
+function render() {
+  if (state.tab === 'requests' && !sess.admin) state.tab = 'ranking';
+  renderChrome();
+  app.innerHTML = state.tab === 'ranking' ? viewRanking() : state.tab === 'games' ? viewGames() : state.tab === 'requests' ? viewRequests() : viewFactions();
+}
+
+/* =========================================================
+   DIALOGS
+   ========================================================= */
+function shell(title, body, foot, formAttr) {
+  const inner = `<div class="dlg-body">${body}</div><div class="dlg-foot">${foot}</div>`;
+  return `<div class="dlg"><div class="dlg-head">${title}<button type="button" class="x" data-a="close" aria-label="Close">×</button></div>` +
+    (formAttr ? `<form class="dlg-form" ${formAttr} autocomplete="off" novalidate>${inner}</form>` : `<div class="dlg-form">${inner}</div>`) + '</div>';
+}
+function openDialog(html, kind, narrow) { dlg.className = narrow ? 'narrow' : ''; dlg.dataset.kind = kind || ''; dlg.innerHTML = html; if (!dlg.open) dlg.showModal(); }
+function closeDialog() { if (dlg.open) dlg.close(); dlg.innerHTML = ''; dlg.dataset.kind = ''; }
+dlg.addEventListener('click', e => { if (e.target === dlg) closeDialog(); });
+dlg.addEventListener('close', () => { gform = null; dlg.dataset.kind = ''; });
+
+/* ---- player ---- */
+const nameTaken = (name, exceptId) => db.players.some(p => p.id !== exceptId && key(p.name) === key(name));
+function openPlayerForm(id) {
+  const p = id ? db.players.find(x => x.id === id) : null;
+  openDialog(shell(`<h3>${p ? 'Rename player' : 'New player'}</h3>`,
+    `<div class="field"><label>Player name</label><input name="name" required maxlength="40" value="${esc(p ? p.name : '')}"></div>
+     ${p ? '' : `<div class="hint">A new player starts with ${START_ELO} elo points. You can also add players directly when entering a game.</div>`}`,
+    `<div class="err" id="err"></div><div class="btns"><button type="button" data-a="close">Cancel</button><button class="primary" type="submit">Save</button></div>`,
+    `data-form="player" data-id="${esc(id || '')}"`), 'player', true);
+  dlg.querySelector('input[name=name]').select();
+}
+
+function openProfile(id) {
+  const E = elo(), p = E.players.get(id); if (!p) return;
+  const rk = eloRankMap(), rank = rk.get(id), total = rk.size;
+  const facRows = [...p.factions.entries()].sort((a, b) => b[1].games - a[1].games || b[1].wins - a[1].wins);
+  const hist = p.history.slice().reverse().slice(0, 12);
+  openDialog(shell(`<div class="who">${hexHTML(p.name.charAt(0).toUpperCase(), 0, true)}<div><h3>${esc(p.name)}</h3><span class="muted">${rank ? `#${rank} of ${total} in the ranking` : 'no games played yet'}</span></div></div>`,
+    `<div class="head-row" style="margin:6px 0 4px"><div><div class="big-elo">${Math.round(p.rating)}</div><span class="muted">ELO · peak ${Math.round(p.peak)}</span></div>${p.lastDelta != null ? `<div>${deltaHTML(p.lastDelta)} <span class="muted">last game</span></div>` : ''}</div>
+    <div class="stats">
+      <div class="stat"><b>${p.games}</b><span>Games</span></div><div class="stat"><b>${p.wins}</b><span>Wins</span></div>
+      <div class="stat"><b>${p.games - p.wins}</b><span>Losses</span></div><div class="stat"><b>${p.games ? Math.round(p.wins / p.games * 100) + '%' : '—'}</b><span>Win %</span></div>
+      <div class="stat"><b>${p.games ? fmtNum(p.pts / p.games) : '—'}</b><span>Avg. points</span></div><div class="stat"><b>${p.games ? fmtNum(p.placeSum / p.games) : '—'}</b><span>Avg. place</span></div></div>
+    ${facRows.length ? `<h4>Factions</h4><div class="card tbl"><table><thead><tr><th class="l">Faction</th><th>Played</th><th>Wins</th><th>Ø points</th></tr></thead><tbody>
+      ${facRows.map(([fid, s]) => `<tr><td class="l">${esc(facName(fid))}</td><td>${s.games}</td><td>${s.wins}</td><td>${fmtNum(s.pts / s.games)}</td></tr>`).join('')}</tbody></table></div>` : ''}
+    ${hist.length ? `<h4>Recent games</h4><div class="card tbl"><table><thead><tr><th class="l">Date</th><th class="l">Faction</th><th>Place</th><th>Points</th><th>ELO</th><th></th></tr></thead><tbody>
+      ${hist.map(h => `<tr><td class="l">${esc(fmtDate(h.date))}</td><td class="l">${esc(facShort(h.faction))}</td><td>${h.place}/${h.n}${h.win ? ' ★' : ''}</td><td>${esc(h.points)}</td><td>${Math.round(h.rating)}</td><td>${deltaHTML(h.delta)}</td></tr>`).join('')}</tbody></table></div>` : ''}`,
+    `<div class="btns">${sess.admin ? `<button class="small danger" data-a="del-player" data-id="${esc(id)}">Delete player</button><button data-a="rename-player" data-id="${esc(id)}">Rename</button>` : ''}<button class="primary" data-a="close">Close</button></div>`), 'profile');
+}
+
+/* ---- game form ---- */
+let gform = null;
+function factionOptions(selected) {
+  let html = '<option value="">— faction —</option>';
+  for (const gk of Object.keys(GROUPS)) {
+    const list = FACTIONS.filter(f => f.g === gk && (groups()[gk] || f.id === selected)).sort((a, b) => a.sort.localeCompare(b.sort));
+    if (list.length) html += `<optgroup label="${esc(GROUPS[gk])}">${list.map(f => `<option value="${f.id}" ${f.id === selected ? 'selected' : ''}>${esc(f.name)}</option>`).join('')}</optgroup>`;
+  }
+  if (selected && !FMAP[selected]) html += `<option value="${esc(selected)}" selected>${esc(selected)}</option>`;
+  return html;
+}
+function rowsHTML() {
+  return gform.rows.map((r, i) => `<div class="grow" data-i="${i}" data-n="Player ${i + 1}">
+    <div class="c-name"><input class="c-in" name="nm" list="pl-dl" placeholder="Player ${i + 1} name" maxlength="40" aria-label="Player ${i + 1} name" autocapitalize="words" value="${esc(r.name)}"><div class="hint2" data-hint></div></div>
+    <select name="fc" aria-label="Faction">${factionOptions(r.faction)}</select>
+    <input name="pt" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="Points" aria-label="Points" value="${r.points === '' || r.points == null ? '' : esc(r.points)}">
+    <select name="rs" aria-label="Result"><option value="L" ${r.result !== 'W' ? 'selected' : ''}>Loss</option><option value="W" ${r.result === 'W' ? 'selected' : ''}>Win</option></select>
+  </div>`).join('');
+}
+function syncRows() {
+  gform.rows = [...dlg.querySelectorAll('.grow')].map(r => ({ name: r.querySelector('[name=nm]').value, faction: r.querySelector('[name=fc]').value, points: r.querySelector('[name=pt]').value, result: r.querySelector('[name=rs]').value }));
+}
+function refreshRows() { $('#grows').innerHTML = rowsHTML(); updateHints(); refreshFactionDisabled(); }
+function updateHints() {
+  const E = elo(); const byN = new Map(db.players.map(p => [key(p.name), p]));
+  dlg.querySelectorAll('.grow').forEach(r => {
+    const h = r.querySelector('[data-hint]'), nm = norm(r.querySelector('[name=nm]').value);
+    if (!nm) { h.textContent = ''; h.className = 'hint2'; return; }
+    const p = byN.get(key(nm));
+    if (p) { const s = E.players.get(p.id); h.className = 'hint2'; h.textContent = `ELO ${Math.round(s.rating)} · ${plural(s.games, 'game', 'games')}`; }
+    else { h.className = 'hint2 new'; h.textContent = `New player · starts at ${START_ELO} elo`; }
+  });
+  renderChips();
+}
+function renderChips() {
+  const box = $('#chips'); if (!box) return;
+  const E = elo(), used = new Set([...dlg.querySelectorAll('.grow [name=nm]')].map(i => key(i.value)));
+  const list = db.players.filter(p => !used.has(key(p.name))).sort((a, b) => (E.players.get(b.id).rating - E.players.get(a.id).rating) || byName(a.name, b.name));
+  box.innerHTML = list.length ? `<div class="chips-label">Saved players · tap to add</div><div class="chips">${list.map(p => `<button type="button" data-a="pick" data-name="${esc(p.name)}">${esc(p.name)}</button>`).join('')}</div>` : '';
+}
+function refreshFactionDisabled() {
+  const sels = [...dlg.querySelectorAll('select[name=fc]')], used = new Set(sels.map(s => s.value).filter(Boolean));
+  sels.forEach(s => [...s.options].forEach(o => { o.disabled = !!o.value && used.has(o.value) && o.value !== s.value; }));
+}
+function openGame(id, draft) {
+  const g = id ? db.games.find(x => x.id === id) : null;
+  const pm = Object.fromEntries(db.players.map(p => [p.id, p]));
+  const last = db.games.slice().sort((a, b) => b.createdAt - a.createdAt)[0];
+  let rows, date, note;
+  if (draft) { rows = draft.rows.map(r => ({ name: r.name, faction: r.faction, points: r.points, result: r.result })); date = draft.date; note = draft.note; }
+  else if (g) { rows = g.participants.map(x => ({ name: pm[x.playerId]?.name || '', faction: x.faction, points: x.points, result: x.result })); date = g.date; note = g.note; }
+  else { const n0 = last ? Math.min(8, Math.max(3, last.participants.length)) : 6; rows = Array.from({ length: n0 }, () => ({ name: '', faction: '', points: '', result: 'L' })); date = today(); note = ''; }
+  const n = rows.length;
+  gform = { id: g ? g.id : null, pendingId: (draft && draft.pendingId) || null, draft: null, manual: false, focusRow: 0, rows };
+  const maxN = Math.max(8, n);
+  const admin = sess.admin;
+  const title = g ? 'Edit game' : gform.pendingId ? 'Review request' : admin ? 'New game' : 'Submit a game';
+  const submitLabel = g ? 'Save game' : gform.pendingId ? 'Save and approve' : admin ? 'Save game' : 'Next';
+  openDialog(shell(`<h3>${title}</h3>`,
+    `${!admin ? '<div class="box">The admin reviews your game. Once it is accepted, it is added to the shared database.</div>' : ''}
+      <div class="top-fields">
+        <div class="field"><label>Date</label><input type="date" name="date" required value="${esc(date)}"></div>
+        <div class="field"><label>Number of players</label><select id="pcount">${Array.from({ length: maxN - 2 }, (_, i) => i + 3).map(v => `<option ${v === n ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+      </div>
+      <div id="chips"></div>
+      <div class="glabels"><span>Player</span><span>Faction</span><span>Points</span><span>Result</span></div>
+      <div id="grows">${rowsHTML()}</div>
+      <datalist id="pl-dl">${db.players.slice().sort((a, b) => byName(a.name, b.name)).map(p => `<option value="${esc(p.name)}">`).join('')}</datalist>
+      <div class="hint">Type a player's name or tap one from the saved list. ${admin ? `If the name doesn't exist yet, the player is saved automatically with ${START_ELO} elo. ` : 'New players are added when the admin approves the game. '}Once everyone has points, the winner is marked automatically (you can change it).</div>
+      <div class="field" style="margin-top:14px"><label>Note (optional)</label><textarea name="note" rows="2" maxlength="500">${esc(note)}</textarea></div>`,
+    `<div class="err" id="err"></div><div class="btns"><button type="button" data-a="close">Cancel</button><button class="primary" type="submit">${submitLabel}</button></div>`,
+    'data-form="game"'), 'game');
+  updateHints(); refreshFactionDisabled();
+}
+function autoWinner() {
+  syncRows(); const rows = gform.rows;
+  if (rows.some(r => r.points === '' || isNaN(Number(r.points)))) return;
+  const pts = rows.map(r => Number(r.points)), max = Math.max(...pts), cnt = pts.filter(x => x === max).length;
+  dlg.querySelectorAll('.grow [name=rs]').forEach((s, i) => { s.value = (cnt === 1 && pts[i] === max) ? 'W' : 'L'; });
+}
+dlg.addEventListener('input', e => {
+  if (!gform) return;
+  if (e.target.name === 'nm') updateHints();
+  if (e.target.name === 'pt' && !gform.manual) autoWinner();
+});
+dlg.addEventListener('focusin', e => { if (gform && e.target.name === 'nm') gform.focusRow = Number(e.target.closest('.grow').dataset.i); });
+dlg.addEventListener('change', e => {
+  if (!gform) return;
+  const t = e.target;
+  if (t.name === 'fc') refreshFactionDisabled();
+  if (t.name === 'nm') updateHints();
+  if (t.name === 'rs') { gform.manual = true; if (t.value === 'W') dlg.querySelectorAll('.grow [name=rs]').forEach(s => { if (s !== t) s.value = 'L'; }); }
+  if (t.id === 'pcount') {
+    syncRows(); const n = Number(t.value);
+    while (gform.rows.length < n) gform.rows.push({ name: '', faction: '', points: '', result: 'L' });
+    if (gform.rows.length > n) {
+      const drop = gform.rows.slice(n).filter(r => norm(r.name) || r.faction || r.points !== '');
+      if (drop.length && !confirm('Reducing the number of players removes the last rows, which already contain data. Continue?')) { t.value = String(gform.rows.length); return; }
+      gform.rows.length = n;
+    }
+    refreshRows();
+  }
+});
+function pickPlayer(name) {
+  const inputs = [...dlg.querySelectorAll('.grow [name=nm]')];
+  let t = inputs[gform.focusRow]; if (!t || norm(t.value)) t = inputs.find(i => !norm(i.value));
+  if (!t) { toast('All rows are already filled. Increase the number of players.'); return; }
+  t.value = name; updateHints();
+  const next = inputs.find(i => !norm(i.value)); gform.focusRow = next ? Number(next.closest('.grow').dataset.i) : 0;
+}
+
+async function saveGame(form) {
+  syncRows(); const rows = gform.rows, err = m => { $('#err').textContent = m; $('#err').scrollIntoView({ block: 'nearest' }); };
+  const date = new FormData(form).get('date'), note = norm(new FormData(form).get('note') || '');
+  if (!date) return err('Enter a date.');
+  const names = rows.map(r => norm(r.name));
+  if (names.some(n => !n)) return err('Enter a name for every player.');
+  if (new Set(names.map(key)).size !== names.length) return err('The same player is listed more than once.');
+  if (rows.some(r => !r.faction)) return err('Pick a faction for every player.');
+  if (new Set(rows.map(r => r.faction)).size !== rows.length) return err('The same faction is picked more than once.');
+  if (rows.some(r => r.points === '' || !Number.isInteger(Number(r.points)) || Number(r.points) < 0 || Number(r.points) > 99)) return err('Points must be a whole number from 0 to 99 for every player.');
+  const winners = rows.filter(r => r.result === 'W').length;
+  if (winners !== 1) return err(winners === 0 ? 'Mark the winner.' : 'Only one player can be the winner.');
+  const max = Math.max(...rows.map(r => Number(r.points))), w = rows.find(r => r.result === 'W');
+  if (Number(w.points) < max && !confirm('The selected winner does not have the most points. Continue?')) return;
+  const payload = { date, note, participants: rows.map((r, i) => ({ name: names[i], faction: r.faction, points: Number(r.points), result: r.result })) };
+
+  if (!sess.admin) {                                   // guest: ask for the code first, then send to the admin for approval
+    gform.draft = { date, note, rows: payload.participants.map(x => ({ name: x.name, faction: x.faction, points: x.points, result: x.result })) };
+    openCodeStep(); return;
+  }
+  const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
+  const wasPending = !!gform.pendingId, wasEdit = !!gform.id;
+  try {
+    const j = wasPending ? await adminCall('POST', '/api/pending/' + enc(gform.pendingId) + '/approve', payload)
+      : wasEdit ? await adminCall('PUT', '/api/games/' + enc(gform.id), payload)
+        : await adminCall('POST', '/api/games', payload);
+    gform = null; closeDialog();
+    state.tab = wasPending && db.pending.length ? 'requests' : 'games'; state.filters = { player: '', faction: '', from: '', to: '' }; render(); window.scrollTo(0, 0);
+    toast((wasPending ? 'Request approved, game saved.' : 'Game saved.') + (j.created && j.created.length ? ' New players: ' + j.created.join(', ') + '.' : ''));
+  } catch (e) { err(e.message); btn.disabled = false; }
+}
+
+/* ---- submitting a game (guest): code step ---- */
+function openCodeStep() {
+  const d = gform.draft;
+  openDialog(shell('<h3>Confirm submission</h3>',
+    `<div class="box">Game from <b>${esc(fmtDate(d.date))}</b> · ${d.rows.length} players. The admin has to approve it before it goes into the database.</div>
+     <div class="field"><label>Code for submitting games</label><input name="code" autocomplete="off" autocapitalize="off" spellcheck="false" required></div>
+     <div class="field"><label>Your name (optional)</label><input name="who" maxlength="40" value="${esc(ls.get(NAME_KEY) || '')}"></div>`,
+    `<div class="err" id="err"></div><div class="btns"><button type="button" data-a="back-form">Back</button><button class="primary" type="submit">Send to admin</button></div>`,
+    'data-form="code"'), 'code', true);
+  dlg.querySelector('input[name=code]').focus();
+}
+async function submitCode(form) {
+  const fd = new FormData(form), code = norm(fd.get('code')), who = norm(fd.get('who')), err = m => { $('#err').textContent = m; };
+  if (!code) return err('Enter the code.');
+  const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
+  const d = gform.draft;
+  try {
+    await api('POST', '/api/submit', { date: d.date, note: d.note, submitter: who, participants: d.rows.map(r => ({ name: r.name, faction: r.faction, points: Number(r.points), result: r.result })) }, { code });
+    if (who) ls.set(NAME_KEY, who);
+    gform = null; closeDialog();
+    toast('Game sent to the admin for approval. It will appear in the database once accepted.');
+  } catch (e) { err(e.code === 'code' ? 'Wrong code.' : e.message); btn.disabled = false; }
+}
+
+/* ---- admin login ---- */
+function openLogin() {
+  openDialog(shell('<h3>Admin login</h3>',
+    `<div class="field"><label>Password</label><input type="password" name="pw" autocomplete="current-password" required></div><div class="hint">For the database administrator only.</div>`,
+    `<div class="err" id="err"></div><div class="btns"><button type="button" data-a="close">Cancel</button><button class="primary" type="submit">Log in</button></div>`,
+    'data-form="login"'), 'login', true);
+  dlg.querySelector('input[name=pw]').focus();
+}
+async function submitLogin(form) {
+  const pw = String(new FormData(form).get('pw') || ''), btn = form.querySelector('button[type=submit]');
+  if (!pw) { $('#err').textContent = 'Enter the password.'; return; }
+  btn.disabled = true;
+  try {
+    const j = await api('POST', '/api/login', { password: pw });
+    sess.token = j.token; ls.set(TOKEN_KEY, j.token); sess.admin = true; sess.liveRev = ''; sess.pendingSeen = null;
+    closeDialog(); await refresh(); toast('Logged in as admin.');
+  } catch (e) { $('#err').textContent = e.message; btn.disabled = false; }
+}
+function doLogout() { dropAdmin(); if (state.tab === 'requests') state.tab = 'ranking'; closeDialog(); render(); toast('Logged out.'); }
+
+/* ---- data and settings ---- */
+const groupsHTML = () => `<div class="setrow">${Object.entries(GROUPS).map(([k, l]) => `<label class="chk"><input type="checkbox" data-group="${k}" ${groups()[k] ? 'checked' : ''}> ${esc(l)}</label>`).join('')}</div>`;
+const eloExplain = () => `<details><summary>Show explanation</summary>
+      <p>Everyone starts at ${START_ELO}. Ranking within a game: the winner is first, the others follow by points (equal points = shared place).</p>
+      <p>Each game is treated as a series of head-to-head duels, everyone against everyone. For each pair, the expected result is worked out from the elo difference: <code>E = 1 / (1 + 10^((Rb − Ra) / 400))</code>. Whoever did better than the other in the game scores 1, whoever did worse scores 0, and equal points score 0.5.</p>
+      <p>Elo change = <code>K / (N − 1) × Σ (actual − expected)</code>. So a high-rated player gains little for beating weaker players but loses a lot when losing to them, and the other way round for a lower-rated player. The changes in a game always add up to 0. If an old game is edited or deleted, everyone's elo is recalculated from the start.</p></details>`;
+function dataHTML() {
+  if (!sess.admin) {
+    return shell('<h3>Settings</h3>',
+      `<h4>Display</h4><label>Factions in the dropdown (this device only)</label>${groupsHTML()}
+       <h4>How elo is calculated</h4>${eloExplain()}
+       <h4>Admin</h4><button class="small" data-a="login">Admin login</button>`,
+      `<div class="btns"><button class="primary" data-a="close">Close</button></div>`);
+  }
+  const live = sess.source === 'live';
+  return shell('<h3>Data &amp; settings</h3>',
+    `<h4>Server</h4>
+    <div class="box ${live ? '' : 'warn'}">${live ? 'Connected. The database is the file <b>data.json</b> in your GitHub repository. Every change is saved there as a commit, so the repository is also your backup and full history.' : 'The server is currently unavailable. Changes are not possible until it is back.'}</div>
+    <div class="btnrow"><button data-a="refresh">Refresh</button></div>
+    <h4>Backup</h4>
+    <div class="btnrow"><button data-a="export-json">Download backup (JSON)</button><button data-a="import">Import backup</button><button data-a="export-csv">Export to Excel (CSV)</button></div>
+    <h4>Settings</h4>
+    <div class="field" style="max-width:300px"><label>K factor (how much elo changes per game)</label><input type="number" inputmode="numeric" data-setting="k" min="1" max="200" step="1" value="${esc(db.settings.k)}"></div>
+    <label>Factions in the dropdown (this device only)</label>${groupsHTML()}
+    <h4>How elo is calculated</h4>${eloExplain()}
+    <h4>Login</h4><button class="small" data-a="logout">Log out</button>`,
+    `<div class="btns"><button class="primary" data-a="close">Close</button></div>`);
+}
+function openData() { openDialog(dataHTML(), 'data'); }
+function refreshDataDialog() { if (dlg.open && dlg.dataset.kind === 'data') { const b = dlg.querySelector('.dlg-body'), y = b ? b.scrollTop : 0; dlg.innerHTML = dataHTML(); const nb = dlg.querySelector('.dlg-body'); if (nb) nb.scrollTop = y; } }
+
+/* ---- export / import (admin only) ---- */
+function download(name, text, type) {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+async function exportJSON() {
+  const j = await api('GET', '/api/export');
+  download('nostromo-backup-' + today() + '.json', JSON.stringify(j, null, 2), 'application/json');
+  toast('Backup downloaded. Keep the file somewhere safe.');
+}
+function exportCSV() {
+  const E = elo(), pm = Object.fromEntries(db.players.map(p => [p.id, p]));
+  const cell = v => { v = String(v ?? ''); return /[";\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  const lines = [['Date', 'Game', 'Player', 'Faction', 'Points', 'Place', 'Result', 'Elo before', 'Elo after', 'Note'].join(';')];
+  const games = db.games.slice().sort((a, b) => a.date.localeCompare(b.date) || a.createdAt - b.createdAt);
+  games.forEach((g, gi) => { const em = E.byGame[g.id] || new Map(); g.participants.forEach(x => { const e = em.get(x.playerId);
+    lines.push([g.date, gi + 1, pm[x.playerId]?.name || '', facName(x.faction), x.points, e ? e.place : '', x.result === 'W' ? 'Win' : 'Loss', e ? Math.round(e.before) : '', e ? Math.round(e.after) : '', g.note].map(cell).join(';')); }); });
+  download('nostromo-games-' + today() + '.csv', '﻿' + lines.join('\r\n'), 'text/csv;charset=utf-8');
+  toast('CSV downloaded (one row per player per game).');
+}
+$('#file').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f || !sess.admin) return;
+  try {
+    const raw = JSON.parse(await f.text()), imp = sanitize(raw);
+    if (!confirm(`This will REPLACE the current database (${db.players.length} players, ${db.games.length} games) with the file (${imp.players.length} players, ${imp.games.length} games).\nThe previous version stays in the repository history.\n\nContinue?`)) return;
+    await adminCall('POST', '/api/import', { data: raw });
+    render(); refreshDataDialog(); toast('Data imported.');
+  } catch (err) { toast('Import failed: ' + err.message); }
+});
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+const ADMIN_ONLY = new Set(['edit-game', 'del-game', 'new-player', 'rename-player', 'del-player', 'approve', 'reject', 'edit-pending', 'export-json', 'export-csv', 'import', 'logout']);
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a, id = el.dataset.id;
+  if (ADMIN_ONLY.has(a) && !sess.admin) return;
+  try {
+    switch (a) {
+      case 'tab': state.tab = id; render(); window.scrollTo(0, 0); break;
+      case 'close': closeDialog(); break;
+      case 'data': openData(); break;
+      case 'new-game': openGame(null); break;
+      case 'edit-game': openGame(id); break;
+      case 'edit-pending': { const p = db.pending.find(x => x.id === id); if (p) openGame(null, { pendingId: p.id, date: p.date, note: p.note, rows: p.participants }); break; }
+      case 'back-form': openGame(null, gform && gform.draft); break;
+      case 'pick': pickPlayer(el.dataset.name); break;
+      case 'del-game': { const g = db.games.find(x => x.id === id); if (g && confirm('Delete the game from ' + fmtDate(g.date) + '?\nElo for all players will be recalculated.')) { await adminCall('DELETE', '/api/games/' + enc(id)); render(); toast('Game deleted.'); } break; }
+      case 'approve': { const j = await adminCall('POST', '/api/pending/' + enc(id) + '/approve', {}); render(); toast('Game approved and saved.' + (j.created && j.created.length ? ' New players: ' + j.created.join(', ') + '.' : '')); break; }
+      case 'reject': if (confirm('Reject this request? The game will not be added to the database.')) { await adminCall('POST', '/api/pending/' + enc(id) + '/reject', {}); render(); toast('Request rejected.'); } break;
+      case 'new-player': openPlayerForm(null); break;
+      case 'rename-player': openPlayerForm(id); break;
+      case 'profile': openProfile(id); break;
+      case 'del-player': {
+        const p = db.players.find(x => x.id === id); if (!p) break;
+        const used = db.games.filter(g => g.participants.some(x => x.playerId === id)).length;
+        if (used) { toast(`${p.name} has ${plural(used, 'game', 'games')}. Delete or edit those games first.`); break; }
+        if (confirm('Delete player “' + p.name + '”?')) { await adminCall('DELETE', '/api/players/' + enc(id)); closeDialog(); render(); toast('Player deleted.'); }
+        break;
+      }
+      case 'sort': { const t = el.dataset.tab === 'factions' ? 'fsort' : 'sort', k = el.dataset.key; state[t] = state[t].key === k ? { key: k, dir: -state[t].dir } : { key: k, dir: ascKey(k) ? 1 : -1 }; render(); break; }
+      case 'clear-filters': state.filters = { player: '', faction: '', from: '', to: '' }; render(); break;
+      case 'export-json': await exportJSON(); break;
+      case 'export-csv': if (!db.games.length) toast('There are no games to export.'); else exportCSV(); break;
+      case 'import': $('#file').click(); break;
+      case 'login': openLogin(); break;
+      case 'logout': doLogout(); break;
+      case 'refresh': await refresh({ toast: true }); break;
+    }
+  } catch (err) { if (!(err instanceof ApiErr)) console.error(err); toast(err && err.message || 'Something went wrong.'); }
+});
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.lb-row.click')) { e.preventDefault(); e.target.click(); }
+});
+document.addEventListener('change', async e => {
+  const t = e.target;
+  try {
+    if (t.dataset && t.dataset.filter) { state.filters[t.dataset.filter] = t.value; render(); }
+    else if (t.dataset && t.dataset.sortsel) { state[t.dataset.sortsel === 'factions' ? 'fsort' : 'sort'] = { key: t.value, dir: ascKey(t.value) ? 1 : -1 }; render(); }
+    else if (t.dataset && t.dataset.setting === 'k' && sess.admin) {
+      const v = Number(t.value);
+      if (Number.isFinite(v) && v >= 1 && v <= 200) { await adminCall('PUT', '/api/settings', { k: v }); render(); toast('K factor changed, elo recalculated.'); }
+      else { t.value = db.settings.k; toast('K must be between 1 and 200.'); }
+    }
+    else if (t.dataset && t.dataset.group) { prefs.groups[t.dataset.group] = t.checked; savePrefs(); render(); }
+  } catch (err) { if (t.dataset && t.dataset.setting === 'k') t.value = db.settings.k; toast(err && err.message || 'Something went wrong.'); }
+});
+document.addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target, kind = form.dataset.form;
+  try {
+    if (kind === 'game') await saveGame(form);
+    else if (kind === 'code') await submitCode(form);
+    else if (kind === 'login') await submitLogin(form);
+    else if (kind === 'player' && sess.admin) {
+      const name = norm(new FormData(form).get('name')), pid = form.dataset.id;
+      if (!name) { $('#err').textContent = 'Enter a name.'; return; }
+      if (nameTaken(name, pid)) { $('#err').textContent = 'A player with that name already exists.'; return; }
+      try {
+        if (pid) { await adminCall('PUT', '/api/players/' + enc(pid), { name }); toast('Player renamed.'); }
+        else { await adminCall('POST', '/api/players', { name }); toast('Player “' + name + '” added with ' + START_ELO + ' elo.'); }
+      } catch (err) { $('#err').textContent = err.message; return; }
+      closeDialog(); render();
+    }
+  } catch (err) { if (!(err instanceof ApiErr)) console.error(err); toast(err && err.message || 'Something went wrong.'); }
+});
+
+/* =========================================================
+   START
+   ========================================================= */
+render();
+refresh();
+setInterval(() => { if (!document.hidden) refresh(); }, 60000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - sess.checkedAt > 15000) refresh(); });
+</script>
+</body>
+</html>
