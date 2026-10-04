@@ -1,7 +1,7 @@
 {
  "app": "nostromo",
  "v": 1,
- "updatedAt": 1791124432097,
+ "updatedAt": 1791125239010,
  "players": [
   {
    "id": "8632a986-e597-4d4b-91cf-bbf948cd2586",
@@ -32,14 +32,39 @@
    "id": "29673bb8-3b9c-46f2-a375-f6af407f5e9c",
    "name": "Ognjan",
    "createdAt": 1791124432097
+  },
+  {
+   "id": "8a88e632-5bfa-4ea1-8e23-f2b95702576d",
+   "name": "Andreja",
+   "createdAt": 1791125239010
+  },
+  {
+   "id": "16acb573-c247-4649-bf43-8481bc73fa52",
+   "name": "Mikule",
+   "createdAt": 1791125239010
+  },
+  {
+   "id": "b7fb440b-6007-4d68-b37e-6c192a8e5659",
+   "name": "Nikola",
+   "createdAt": 1791125239010
+  },
+  {
+   "id": "fbe126f8-4758-4a04-b60a-77ac5e510509",
+   "name": "Boža",
+   "createdAt": 1791125239010
+  },
+  {
+   "id": "3a1a1f3a-2e77-40de-9fc5-60c179936fc2",
+   "name": "Nidža",
+   "createdAt": 1791125239010
   }
  ],
  "games": [
   {
    "id": "09cb1fc1-83e7-470f-b717-945e379532c5",
-   "createdAt": 1791124432097,
    "date": "2026-10-04",
    "note": "",
+   "createdAt": 1791124432097,
    "participants": [
     {
      "playerId": "8632a986-e597-4d4b-91cf-bbf948cd2586",
@@ -75,6 +100,44 @@
      "playerId": "29673bb8-3b9c-46f2-a375-f6af407f5e9c",
      "faction": "naazrokha",
      "points": 7,
+     "result": "L"
+    }
+   ]
+  },
+  {
+   "id": "9e5024b4-68dd-44f5-8367-c4ce778da98b",
+   "createdAt": 1791125239010,
+   "date": "2026-10-04",
+   "note": "",
+   "participants": [
+    {
+     "playerId": "8a88e632-5bfa-4ea1-8e23-f2b95702576d",
+     "faction": "muaat",
+     "points": 10,
+     "result": "W"
+    },
+    {
+     "playerId": "16acb573-c247-4649-bf43-8481bc73fa52",
+     "faction": "creuss",
+     "points": 9,
+     "result": "L"
+    },
+    {
+     "playerId": "b7fb440b-6007-4d68-b37e-6c192a8e5659",
+     "faction": "nomad",
+     "points": 8,
+     "result": "L"
+    },
+    {
+     "playerId": "fbe126f8-4758-4a04-b60a-77ac5e510509",
+     "faction": "arborec",
+     "points": 7,
+     "result": "L"
+    },
+    {
+     "playerId": "3a1a1f3a-2e77-40de-9fc5-60c179936fc2",
+     "faction": "yssaril",
+     "points": 4,
      "result": "L"
     }
    ]
