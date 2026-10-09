@@ -100,13 +100,22 @@ h2{font-size:18px;margin:0;font-weight:750;letter-spacing:.02em}
 .filters select,.filters input{width:100%}
 
 /* ---------- hex badges ---------- */
-.hexw{display:inline-block;flex:none}
-.hexw.g1{filter:drop-shadow(0 0 7px rgba(255,207,90,.55))}
+.hexw{display:inline-block;flex:none;padding:0;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.hexglow{display:inline-block;flex:none}
+.hexglow.t1{filter:drop-shadow(0 0 4px rgba(255,226,145,.85)) drop-shadow(0 0 14px rgba(255,207,90,.8))}
+.hexglow.t2{filter:drop-shadow(0 0 4px rgba(236,240,255,.8)) drop-shadow(0 0 12px rgba(205,214,240,.65))}
+.hexglow.t3{filter:drop-shadow(0 0 4px rgba(245,195,155,.8)) drop-shadow(0 0 12px rgba(224,160,112,.65))}
+.hexw.t1{padding:3px;background:linear-gradient(160deg,#ffe38a,#d9a12b)}
+.hexw.t2{padding:3px;background:linear-gradient(160deg,#eef1fb,#9aa4c3)}
+.hexw.t3{padding:3px;background:linear-gradient(160deg,#f0b98c,#b9703c)}
 .hex{display:grid;place-items:center;width:34px;height:38px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,rgba(90,100,190,.55),rgba(50,56,120,.55));color:var(--muted);font-weight:800;font-size:14px}
-.g1 .hex{background:linear-gradient(160deg,#ffe38a,#d9a12b);color:#231a00}
-.g2 .hex{background:linear-gradient(160deg,#eef1fb,#9aa4c3);color:#101526}
-.g3 .hex{background:linear-gradient(160deg,#f0b98c,#b9703c);color:#241100}
 .hex.big{width:58px;height:64px;font-size:26px;background:linear-gradient(160deg,#5be7ff,#8f7bff);color:#06101e}
+.hex.fg-base{background:linear-gradient(160deg,var(--g-base),#0d7f99);color:#06101e}
+.hex.fg-pok{background:linear-gradient(160deg,var(--g-pok),#4a3b99);color:#0b0718}
+.hex.fg-codex{background:linear-gradient(160deg,var(--g-codex),#1f8f5d);color:#021a10}
+.hex.fg-te{background:linear-gradient(160deg,var(--g-te),#a2550f);color:#210f00}
+.hexw.t1 .hex,.hexw.t2 .hex,.hexw.t3 .hex{width:42px;height:47px;font-size:17px}
+.hex.has-img{background-size:cover;background-position:center;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 6px rgba(0,0,0,.7)}
 
 /* ---------- ranking / factions (grid instead of table) ---------- */
 .lb{overflow:hidden}
@@ -134,7 +143,8 @@ h2{font-size:18px;margin:0;font-weight:750;letter-spacing:.02em}
 .delta.up{color:var(--good);background:rgba(88,232,164,.12)}.delta.down{color:var(--bad);background:rgba(255,125,141,.12)}.delta.zero{color:var(--muted);background:rgba(140,150,255,.1)}
 .wbar{height:5px;border-radius:3px;background:rgba(140,150,255,.14);margin-top:7px;overflow:hidden}
 .wbar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:3px}
-.fname{display:flex;flex-direction:column;align-items:flex-start;gap:0}
+.fname{display:flex;flex-direction:row;align-items:center;gap:8px}
+.flabel{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:0}
 .fname b{font-weight:700;white-space:normal}
 
 /* ---------- games ---------- */
@@ -162,6 +172,13 @@ dialog::backdrop{background:rgba(2,3,10,.72);-webkit-backdrop-filter:blur(3px);b
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
 @keyframes sheet{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
 .dlg{display:flex;flex-direction:column;width:100%;min-height:0;max-height:inherit}
+.dlg.fg-dlg-base{background:linear-gradient(165deg,rgba(85,227,255,.16),rgba(85,227,255,0) 55%),radial-gradient(120% 70% at 100% 0%,rgba(85,227,255,.1),transparent 60%)}
+.dlg.fg-dlg-pok{background:linear-gradient(165deg,rgba(155,140,255,.18),rgba(155,140,255,0) 55%),radial-gradient(120% 70% at 100% 0%,rgba(155,140,255,.1),transparent 60%)}
+.dlg.fg-dlg-codex{background:linear-gradient(165deg,rgba(88,232,164,.16),rgba(88,232,164,0) 55%),radial-gradient(120% 70% at 100% 0%,rgba(88,232,164,.1),transparent 60%)}
+.dlg.fg-dlg-te{background:linear-gradient(165deg,rgba(255,179,92,.18),rgba(255,179,92,0) 55%),radial-gradient(120% 70% at 100% 0%,rgba(255,179,92,.1),transparent 60%)}
+.dlg.has-img{background-size:cover;background-position:center top;background-repeat:no-repeat}
+.dlg.has-img .dlg-head,.dlg.has-img .head-row{text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 14px rgba(0,0,0,.8)}
+.dlg.has-img .dlg-head .muted,.dlg.has-img .head-row .muted{color:#eef0fb}
 .dlg-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 10px}
 .dlg-head h3{margin:0;font-size:18px;letter-spacing:.04em}
 .dlg-head .x{border:0;background:none;font-size:26px;line-height:1;padding:2px 10px;color:var(--muted);border-radius:8px}
@@ -335,6 +352,10 @@ const API_URL = String(window.NOSTROMO_API || CFG.API).replace(/\/+$/, '');
 const HOME_URL = String(window.NOSTROMO_HOME || CFG.HOME || '').replace(/\/?$/, '/');
 
 const GROUPS = { base: 'Base game', pok: 'Prophecy of Kings', codex: 'Codex', te: "Thunder's Edge" };
+/* which expansion a game was played with - required on every game. "pok" also covers Codex games. */
+const RULESETS = [['base', 'Base game'], ['pok', 'Prophecy of Kings'], ['te', "Thunder's Edge"]];
+const RULESET_MAP = Object.fromEntries(RULESETS);
+const rulesetName = id => RULESET_MAP[id] || (id ? id : '—');
 const FACTIONS = [
   ['arborec', 'The Arborec', 'Arborec', 'base'], ['letnev', 'The Barony of Letnev', 'Barony of Letnev', 'base'],
   ['saar', 'The Clan of Saar', 'Clan of Saar', 'base'], ['muaat', 'The Embers of Muaat', 'Embers of Muaat', 'base'],
@@ -357,6 +378,12 @@ const FACTIONS = [
 const FMAP = Object.fromEntries(FACTIONS.map(f => [f.id, f]));
 const facName = id => FMAP[id]?.name || (id ? id : '—');
 const facShort = id => FMAP[id]?.short || (id ? id : '—');
+
+/* factions with real crest/portrait art available in /factions - everyone else falls back to the
+   plain colour theme. Add an id here once its two images are uploaded to the repo. */
+const FACTION_IMG_IDS = new Set(FACTIONS.map(f => f.id));
+const facCrestUrl = id => FACTION_IMG_IDS.has(id) ? `factions/${id}-crest.webp` : '';
+const facPortraitUrl = id => FACTION_IMG_IDS.has(id) ? `factions/${id}-portrait.webp` : '';
 
 const ICON = {
   trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg>',
@@ -383,7 +410,20 @@ const key = s => norm(s).toLowerCase();
 const byName = (a, b) => a.localeCompare(b, 'en');
 const enc = encodeURIComponent;
 const deltaHTML = (d, cls = '') => d == null ? '' : `<span class="delta ${d > 0 ? 'up' : d < 0 ? 'down' : 'zero'} ${cls}">${d > 0 ? '+' : d < 0 ? '−' : '±'}${Math.abs(d)}</span>`;
-const hexHTML = (txt, r, big) => `<span class="hexw ${r && r <= 3 ? 'g' + r : ''}"><span class="hex ${big ? 'big' : ''}">${esc(txt)}</span></span>`;
+/* opts: { big, group, fac } - group is a faction group id (base/pok/codex/te) used to theme the hex like
+   the player's favourite faction (fallback); fac is the faction id itself - when it has real crest art
+   (facCrestUrl), that image is used as the hex's background instead of the flat group colour.
+   rank<=3 additionally gets a gold/silver/bronze border ring. */
+const hexHTML = (txt, rank, opts = {}) => {
+  const tier = rank && rank <= 3 ? rank : 0;
+  const g = opts.group && GROUPS[opts.group] ? opts.group : '';
+  const img = opts.fac ? facCrestUrl(opts.fac) : '';
+  const style = img ? ` style="background-image:url('${esc(img)}')"` : '';
+  const inner = `<span class="hexw ${tier ? 't' + tier : ''}"><span class="hex ${opts.big ? 'big' : ''} ${g ? 'fg-' + g : ''} ${img ? 'has-img' : ''}"${style}>${esc(txt)}</span></span>`;
+  /* the glow has to live on its own wrapper: Chromium clips a filter's drop-shadow output to the
+     element's own clip-path, so a glow on the same node as the hexagon clip-path never shows. */
+  return tier ? `<span class="hexglow t${tier}">${inner}</span>` : inner;
+};
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 3800); }
 
 /* ---- stars ---- */
@@ -427,7 +467,7 @@ function sanitize(d) {
   out.players = d.players.filter(p => p && p.id && typeof p.name === 'string' && norm(p.name))
     .map(p => ({ id: String(p.id), name: norm(p.name), createdAt: Number(p.createdAt) || Date.now() }));
   out.games = d.games.filter(g => g && g.id && Array.isArray(g.participants)).map(g => ({
-    id: String(g.id), date: String(g.date || ''), note: String(g.note || ''), createdAt: Number(g.createdAt) || Date.now(),
+    id: String(g.id), date: String(g.date || ''), ruleset: RULESETS.some(r => r[0] === g.ruleset) ? g.ruleset : '', note: String(g.note || ''), createdAt: Number(g.createdAt) || Date.now(),
     participants: g.participants.filter(x => x && x.playerId).map(x => ({
       playerId: String(x.playerId), faction: String(x.faction || ''),
       points: Number.isFinite(Number(x.points)) ? Number(x.points) : 0, result: x.result === 'W' ? 'W' : 'L'
@@ -436,7 +476,7 @@ function sanitize(d) {
   const k = Number(d.settings && d.settings.k);
   out.settings.k = (Number.isFinite(k) && k >= 1 && k <= 200) ? k : DEFAULT_K;
   if (Array.isArray(d.pending)) out.pending = d.pending.filter(p => p && p.id && Array.isArray(p.participants)).map(p => ({
-    id: String(p.id), createdAt: Number(p.createdAt) || 0, submitter: norm(p.submitter), date: String(p.date || ''), note: String(p.note || ''),
+    id: String(p.id), createdAt: Number(p.createdAt) || 0, submitter: norm(p.submitter), date: String(p.date || ''), ruleset: RULESETS.some(r => r[0] === p.ruleset) ? p.ruleset : '', note: String(p.note || ''),
     participants: p.participants.map(x => ({ name: norm(x && x.name), faction: String((x && x.faction) || ''), points: Number(x && x.points) || 0, result: x && x.result === 'W' ? 'W' : 'L' }))
   }));
   return out;
@@ -524,6 +564,17 @@ async function refresh(o = {}) {
    E = 1 / (1 + 10^((Rb - Ra)/400));  S = 1 (better) | 0.5 (equal) | 0 (worse)
    change_a = K/(N-1) * sum_b (S_ab - E_ab)    -> the changes in one game add up to 0
    ========================================================= */
+/* rounds a set of numbers that sum to (approximately) zero to integers that still sum to
+   exactly zero, picking the roundings closest to the real values (largest-remainder method).
+   Used so a game's displayed elo deltas always net out to 0, even after independent rounding. */
+function roundZeroSum(xs) {
+  const floors = xs.map(Math.floor);
+  const rem = -floors.reduce((a, b) => a + b, 0);
+  const order = xs.map((x, i) => i).sort((i, j) => (xs[j] - floors[j]) - (xs[i] - floors[i]));
+  const out = floors.slice();
+  for (let k = 0; k < rem; k++) out[order[k]] += 1;
+  return out;
+}
 function computeElo() {
   const K = db.settings.k;
   const pl = new Map(db.players.map(p => [p.id, { id: p.id, name: p.name, rating: START_ELO, peak: START_ELO, games: 0, wins: 0, pts: 0, placeSum: 0, lastDelta: null, factions: new Map(), history: [] }]));
@@ -541,18 +592,19 @@ function computeElo() {
       for (const b of ps) { if (b === a) continue; const E = 1 / (1 + Math.pow(10, (pl.get(b.playerId).rating - Ra) / 400)); s += cmp(a, b) - E; }
       return K / (n - 1) * s;
     });
+    const dRounded = roundZeroSum(deltas);
     const map = new Map();
     ps.forEach((a, i) => {
       const p = pl.get(a.playerId);
       const place = 1 + ps.filter(b => b !== a && cmp(b, a) === 1).length;
       const before = p.rating, after = before + deltas[i];
-      const d = Math.round(after) - Math.round(before);
+      const d = dRounded[i], beforeR = Math.round(before), afterR = beforeR + d;
       p.rating = after; p.peak = Math.max(p.peak, after); p.games++; p.pts += a.points; p.placeSum += place; p.lastDelta = d;
       const win = a.result === 'W'; if (win) p.wins++;
-      p.history.push({ gameId: g.id, date: g.date, rating: after, delta: d, place, n, faction: a.faction, points: a.points, win });
+      p.history.push({ gameId: g.id, date: g.date, ruleset: g.ruleset, rating: after, delta: d, place, n, faction: a.faction, points: a.points, win });
       bump(p.factions, a.faction, { win, pts: a.points, place });
       bump(fac, a.faction, { win, pts: a.points, place });
-      map.set(a.playerId, { before, after, delta: d, place, n });
+      map.set(a.playerId, { before, after, beforeR, afterR, delta: d, place, n });
     });
     byGame[g.id] = map;
   }
@@ -563,7 +615,7 @@ const elo = () => eloCache || (eloCache = computeElo());
 /* =========================================================
    VIEW STATE
    ========================================================= */
-const state = { tab: 'ranking', sort: { key: 'rating', dir: -1 }, fsort: { key: 'games', dir: -1 }, filters: { player: '', faction: '', from: '', to: '' } };
+const state = { tab: 'ranking', sort: { key: 'rating', dir: -1 }, fsort: { key: 'games', dir: -1 }, gsort: 'date', filters: { player: '', faction: '', ruleset: '', from: '', to: '' } };
 const app = $('#app'), dlg = $('#dlg');
 const ascKey = k => k === 'name' || k === 'avgPlace';
 
@@ -589,9 +641,17 @@ function renderChrome() {
     `<button class="bn" data-a="data" aria-label="${admin ? 'Data and settings' : 'Settings'}">${ICON.sliders}<span>${admin ? 'Data' : 'Settings'}</span></button>`;
 }
 
+/* standard competition ranking: players tied on the (rounded, displayed) elo share the same place,
+   and the next distinct place skips ahead by the number of players tied before it (1, 1, 3, 4, 4, 6...). */
 function eloRankMap() {
   const E = elo(); const list = [...E.players.values()].filter(p => p.games > 0).sort((a, b) => b.rating - a.rating || b.games - a.games || byName(a.name, b.name));
-  return new Map(list.map((p, i) => [p.id, i + 1]));
+  const map = new Map(); let rank = 0, prevRounded = null;
+  list.forEach((p, i) => {
+    const rounded = Math.round(p.rating);
+    if (prevRounded === null || rounded !== prevRounded) rank = i + 1;
+    map.set(p.id, rank); prevRounded = rounded;
+  });
+  return map;
 }
 function topFaction(p) {
   let best = null;
@@ -619,7 +679,7 @@ function viewRanking() {
   return head + `<div class="card lb">
     <div class="lb-grid ranking lb-head"><span class="c-rank">#</span>${hcell('ranking', 'name', 'Player', true)}${hcell('ranking', 'rating', 'ELO')}${hcell('ranking', 'lastDelta', 'Last')}${hcell('ranking', 'games', 'Games')}${hcell('ranking', 'wins', 'Wins')}${hcell('ranking', 'losses', 'Losses')}${hcell('ranking', 'pct', 'Win %')}${hcell('ranking', 'avgPts', 'Avg. points')}<span class="hcell l" style="text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:650">Favourite faction</span></div>
     ${rows.map(p => { const r = rank.get(p.id); return `<div class="lb-grid ranking lb-row click" data-a="profile" data-id="${esc(p.id)}" role="button" tabindex="0">
-      <div class="c-rank">${hexHTML(r || '–', r)}</div>
+      <div class="c-rank">${hexHTML(r || '–', r, { group: p.fav ? FMAP[p.fav]?.g : '', fac: p.fav })}</div>
       <div class="c-name">${esc(p.name)}</div>
       <div class="c-elo"><span class="elo">${Math.round(p.rating)}</span>${deltaHTML(p.lastDelta, 'only-m')}</div>
       <div class="c-last">${deltaHTML(p.lastDelta)}</div>
@@ -632,35 +692,38 @@ function viewRanking() {
 
 function filteredGames() {
   const f = state.filters;
-  return db.games.filter(g => (!f.player || g.participants.some(p => p.playerId === f.player)) && (!f.faction || g.participants.some(p => p.faction === f.faction)) && (!f.from || g.date >= f.from) && (!f.to || g.date <= f.to))
-    .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt);
+  const list = db.games.filter(g => (!f.player || g.participants.some(p => p.playerId === f.player)) && (!f.faction || g.participants.some(p => p.faction === f.faction)) && (!f.ruleset || g.ruleset === f.ruleset) && (!f.from || g.date >= f.from) && (!f.to || g.date <= f.to));
+  if (state.gsort === 'ruleset') return list.sort((a, b) => byName(rulesetName(a.ruleset), rulesetName(b.ruleset)) || b.date.localeCompare(a.date) || b.createdAt - a.createdAt);
+  return list.sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt);
 }
 function viewGames() {
   const E = elo(), pm = Object.fromEntries(db.players.map(p => [p.id, p])), f = state.filters;
   const list = filteredGames();
   const pl = db.players.slice().sort((a, b) => byName(a.name, b.name));
   const usedFac = [...new Set(db.games.flatMap(g => g.participants.map(x => x.faction)).filter(Boolean))].sort((a, b) => byName(facName(a), facName(b)));
-  const head = `<div class="bar"><h2>Games <span class="muted">· ${list.length}${list.length !== db.games.length ? ' of ' + db.games.length : ''}</span></h2></div>`;
+  const head = `<div class="bar"><h2>Games <span class="muted">· ${list.length}${list.length !== db.games.length ? ' of ' + db.games.length : ''}</span></h2>
+    <div class="right"><select data-gsort aria-label="Sort by"><option value="date" ${state.gsort === 'date' ? 'selected' : ''}>↕ Date</option><option value="ruleset" ${state.gsort === 'ruleset' ? 'selected' : ''}>↕ Expansion</option></select></div></div>`;
   if (!db.games.length) return head + `<div class="card empty">${emptyPlanet}<p>No games have been entered yet.</p><button class="primary" data-a="new-game">${newGameLabel()}</button></div>`;
   const filters = `<div class="filters">
     <div><label>Player</label><select data-filter="player"><option value="">All</option>${pl.map(p => `<option value="${esc(p.id)}" ${f.player === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></div>
     <div><label>Faction</label><select data-filter="faction"><option value="">All</option>${usedFac.map(x => `<option value="${esc(x)}" ${f.faction === x ? 'selected' : ''}>${esc(facName(x))}</option>`).join('')}</select></div>
+    <div><label>Expansion</label><select data-filter="ruleset"><option value="">All</option>${RULESETS.map(([k, l]) => `<option value="${k}" ${f.ruleset === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
     <div><label>From date</label><input type="date" data-filter="from" value="${esc(f.from)}"></div>
     <div><label>To date</label><input type="date" data-filter="to" value="${esc(f.to)}"></div>
-    ${(f.player || f.faction || f.from || f.to) ? `<div style="flex:0 0 auto;min-width:0"><button data-a="clear-filters">Clear</button></div>` : ''}</div>`;
+    ${(f.player || f.faction || f.ruleset || f.from || f.to) ? `<div style="flex:0 0 auto;min-width:0"><button data-a="clear-filters">Clear</button></div>` : ''}</div>`;
   if (!list.length) return head + filters + `<div class="card empty"><p>No games match the filters.</p></div>`;
   return head + filters + list.map(g => {
     const em = E.byGame[g.id] || new Map();
     const parts = g.participants.slice().sort((a, b) => (em.get(a.playerId)?.place ?? 99) - (em.get(b.playerId)?.place ?? 99) || byName(pm[a.playerId]?.name || '', pm[b.playerId]?.name || ''));
     return `<article class="card game">
-      <div class="game-head"><div><strong>${esc(fmtDate(g.date))}</strong> <span class="tag">${g.participants.length} players</span></div>
+      <div class="game-head"><div><strong>${esc(fmtDate(g.date))}</strong> <span class="tag">${g.participants.length} players</span>${g.ruleset ? ` <span class="tag">${esc(rulesetName(g.ruleset))}</span>` : ''}</div>
         ${sess.admin ? `<div class="actions"><button class="small" data-a="edit-game" data-id="${esc(g.id)}">Edit</button><button class="small danger" data-a="del-game" data-id="${esc(g.id)}">Delete</button></div>` : ''}</div>
       ${parts.map(x => { const e = em.get(x.playerId); return `<div class="pv ${x.result === 'W' ? 'win' : ''}">
         <span class="pl-place">${e ? e.place + '.' : '–'}</span>
         <span class="pl-name">${esc(pm[x.playerId]?.name || '(unknown player)')}</span>
         <span class="pl-fac" title="${esc(facName(x.faction))}">${esc(facShort(x.faction))}</span>
         <span class="pl-pts">${esc(x.points)}<small> p</small></span>
-        <span class="pl-elo">${e ? Math.round(e.before) + ' → ' + Math.round(e.after) + ' ' + deltaHTML(e.delta) : ''}</span></div>`; }).join('')}
+        <span class="pl-elo">${e ? e.beforeR + ' → ' + e.afterR + ' ' + deltaHTML(e.delta) : ''}</span></div>`; }).join('')}
       ${g.note ? `<p class="note">${esc(g.note)}</p>` : ''}</article>`;
   }).join('');
 }
@@ -683,7 +746,7 @@ function viewFactions() {
     <div class="card lb">
     <div class="lb-grid factions lb-head">${hcell('factions', 'name', 'Faction', true)}${hcell('factions', 'games', 'Played')}${hcell('factions', 'wins', 'Wins')}${hcell('factions', 'pct', 'Win %')}${hcell('factions', 'avgPts', 'Avg. points')}${hcell('factions', 'avgPlace', 'Avg. place')}</div>
     ${rows.map(r => `<div class="lb-grid factions lb-row">
-      <div class="c-name"><div class="fname"><b>${esc(r.name)}</b><span class="tag g-${esc(r.g)}">${esc(GROUPS[r.g] || '')}</span></div><div class="wbar"><i style="width:${r.pct == null ? 0 : Math.round(r.pct * 100)}%"></i></div></div>
+      <div class="c-name"><div class="fname">${hexHTML('', null, { group: r.g, fac: r.id })}<div class="flabel"><b>${esc(r.name)}</b><span class="tag g-${esc(r.g)}">${esc(GROUPS[r.g] || '')}</span></div></div><div class="wbar"><i style="width:${r.pct == null ? 0 : Math.round(r.pct * 100)}%"></i></div></div>
       <div class="c-bar"><div class="wbar"><i style="width:${r.pct == null ? 0 : Math.round(r.pct * 100)}%"></i></div></div>
       <div class="c-games">${r.games}</div><div class="c-wins">${r.wins}</div><div class="c-pct">${r.pct == null ? '—' : Math.round(r.pct * 100) + '%'}</div>
       <div class="c-avg">${fmtNum(r.avgPts)}</div><div class="c-place">${fmtNum(r.avgPlace)}</div>
@@ -699,7 +762,7 @@ function viewRequests() {
   return head + list.map(g => {
     const parts = g.participants.slice().sort((a, b) => (b.result === 'W') - (a.result === 'W') || b.points - a.points || byName(a.name, b.name));
     return `<article class="card game">
-      <div class="game-head"><div><strong>${esc(fmtDate(g.date))}</strong> <span class="tag">${g.participants.length} players</span> <span class="tag">${g.submitter ? 'from: ' + esc(g.submitter) + ' · ' : ''}${esc(fmtTs(g.createdAt))}</span></div>
+      <div class="game-head"><div><strong>${esc(fmtDate(g.date))}</strong> <span class="tag">${g.participants.length} players</span>${g.ruleset ? ` <span class="tag">${esc(rulesetName(g.ruleset))}</span>` : ''} <span class="tag">${g.submitter ? 'from: ' + esc(g.submitter) + ' · ' : ''}${esc(fmtTs(g.createdAt))}</span></div>
         <div class="actions"><button class="small primary" data-a="approve" data-id="${esc(g.id)}">Approve</button><button class="small" data-a="edit-pending" data-id="${esc(g.id)}">Edit</button><button class="small danger" data-a="reject" data-id="${esc(g.id)}">Reject</button></div></div>
       ${parts.map((x, i) => `<div class="pv ${x.result === 'W' ? 'win' : ''}">
         <span class="pl-place">${i + 1}.</span>
@@ -719,9 +782,9 @@ function render() {
 /* =========================================================
    DIALOGS
    ========================================================= */
-function shell(title, body, foot, formAttr) {
+function shell(title, body, foot, formAttr, extraCls, extraStyle) {
   const inner = `<div class="dlg-body">${body}</div><div class="dlg-foot">${foot}</div>`;
-  return `<div class="dlg"><div class="dlg-head">${title}<button type="button" class="x" data-a="close" aria-label="Close">×</button></div>` +
+  return `<div class="dlg ${extraCls || ''}"${extraStyle || ''}><div class="dlg-head">${title}<button type="button" class="x" data-a="close" aria-label="Close">×</button></div>` +
     (formAttr ? `<form class="dlg-form" ${formAttr} autocomplete="off" novalidate>${inner}</form>` : `<div class="dlg-form">${inner}</div>`) + '</div>';
 }
 function openDialog(html, kind, narrow) { dlg.className = narrow ? 'narrow' : ''; dlg.dataset.kind = kind || ''; dlg.innerHTML = html; if (!dlg.open) dlg.showModal(); }
@@ -744,9 +807,12 @@ function openPlayerForm(id) {
 function openProfile(id) {
   const E = elo(), p = E.players.get(id); if (!p) return;
   const rk = eloRankMap(), rank = rk.get(id), total = rk.size;
+  const fav = topFaction(p), favGroup = fav ? FMAP[fav]?.g : '';
+  const portraitUrl = fav ? facPortraitUrl(fav) : '';
+  const dlgStyle = portraitUrl ? ` style="background-image:linear-gradient(180deg,rgba(12,14,36,.62) 0%,rgba(12,14,36,.72) 30%,rgba(12,14,36,.95) 65%,rgba(12,14,36,.99) 100%),url('${esc(portraitUrl)}')"` : '';
   const facRows = [...p.factions.entries()].sort((a, b) => b[1].games - a[1].games || b[1].wins - a[1].wins);
   const hist = p.history.slice().reverse().slice(0, 12);
-  openDialog(shell(`<div class="who">${hexHTML(p.name.charAt(0).toUpperCase(), 0, true)}<div><h3>${esc(p.name)}</h3><span class="muted">${rank ? `#${rank} of ${total} in the ranking` : 'no games played yet'}</span></div></div>`,
+  openDialog(shell(`<div class="who">${hexHTML(p.name.charAt(0).toUpperCase(), null, { big: true, group: favGroup, fac: fav })}<div><h3>${esc(p.name)}</h3><span class="muted">${rank ? `#${rank} of ${total} in the ranking` : 'no games played yet'}${fav ? ` · ${esc(facName(fav))}` : ''}</span></div></div>`,
     `<div class="head-row" style="margin:6px 0 4px"><div><div class="big-elo">${Math.round(p.rating)}</div><span class="muted">ELO · peak ${Math.round(p.peak)}</span></div>${p.lastDelta != null ? `<div>${deltaHTML(p.lastDelta)} <span class="muted">last game</span></div>` : ''}</div>
     <div class="stats">
       <div class="stat"><b>${p.games}</b><span>Games</span></div><div class="stat"><b>${p.wins}</b><span>Wins</span></div>
@@ -754,9 +820,10 @@ function openProfile(id) {
       <div class="stat"><b>${p.games ? fmtNum(p.pts / p.games) : '—'}</b><span>Avg. points</span></div><div class="stat"><b>${p.games ? fmtNum(p.placeSum / p.games) : '—'}</b><span>Avg. place</span></div></div>
     ${facRows.length ? `<h4>Factions</h4><div class="card tbl"><table><thead><tr><th class="l">Faction</th><th>Played</th><th>Wins</th><th>Ø points</th></tr></thead><tbody>
       ${facRows.map(([fid, s]) => `<tr><td class="l">${esc(facName(fid))}</td><td>${s.games}</td><td>${s.wins}</td><td>${fmtNum(s.pts / s.games)}</td></tr>`).join('')}</tbody></table></div>` : ''}
-    ${hist.length ? `<h4>Recent games</h4><div class="card tbl"><table><thead><tr><th class="l">Date</th><th class="l">Faction</th><th>Place</th><th>Points</th><th>ELO</th><th></th></tr></thead><tbody>
-      ${hist.map(h => `<tr><td class="l">${esc(fmtDate(h.date))}</td><td class="l">${esc(facShort(h.faction))}</td><td>${h.place}/${h.n}${h.win ? ' ★' : ''}</td><td>${esc(h.points)}</td><td>${Math.round(h.rating)}</td><td>${deltaHTML(h.delta)}</td></tr>`).join('')}</tbody></table></div>` : ''}`,
-    `<div class="btns">${sess.admin ? `<button class="small danger" data-a="del-player" data-id="${esc(id)}">Delete player</button><button data-a="rename-player" data-id="${esc(id)}">Rename</button>` : ''}<button class="primary" data-a="close">Close</button></div>`), 'profile');
+    ${hist.length ? `<h4>Recent games</h4><div class="card tbl"><table><thead><tr><th class="l">Date</th><th class="l">Faction</th><th class="l">Expansion</th><th>Place</th><th>Points</th><th>ELO</th><th></th></tr></thead><tbody>
+      ${hist.map(h => `<tr><td class="l">${esc(fmtDate(h.date))}</td><td class="l">${esc(facShort(h.faction))}</td><td class="l">${esc(rulesetName(h.ruleset))}</td><td>${h.place}/${h.n}${h.win ? ' ★' : ''}</td><td>${esc(h.points)}</td><td>${Math.round(h.rating)}</td><td>${deltaHTML(h.delta)}</td></tr>`).join('')}</tbody></table></div>` : ''}`,
+    `<div class="btns">${sess.admin ? `<button class="small danger" data-a="del-player" data-id="${esc(id)}">Delete player</button><button data-a="rename-player" data-id="${esc(id)}">Rename</button>` : ''}<button class="primary" data-a="close">Close</button></div>`,
+    null, (favGroup && !portraitUrl ? 'fg-dlg-' + favGroup : '') + (portraitUrl ? ' has-img' : ''), dlgStyle), 'profile');
 }
 
 /* ---- game form ---- */
@@ -807,10 +874,10 @@ function openGame(id, draft) {
   const g = id ? db.games.find(x => x.id === id) : null;
   const pm = Object.fromEntries(db.players.map(p => [p.id, p]));
   const last = db.games.slice().sort((a, b) => b.createdAt - a.createdAt)[0];
-  let rows, date, note;
-  if (draft) { rows = draft.rows.map(r => ({ name: r.name, faction: r.faction, points: r.points, result: r.result })); date = draft.date; note = draft.note; }
-  else if (g) { rows = g.participants.map(x => ({ name: pm[x.playerId]?.name || '', faction: x.faction, points: x.points, result: x.result })); date = g.date; note = g.note; }
-  else { const n0 = last ? Math.min(8, Math.max(3, last.participants.length)) : 6; rows = Array.from({ length: n0 }, () => ({ name: '', faction: '', points: '', result: 'L' })); date = today(); note = ''; }
+  let rows, date, note, ruleset;
+  if (draft) { rows = draft.rows.map(r => ({ name: r.name, faction: r.faction, points: r.points, result: r.result })); date = draft.date; note = draft.note; ruleset = draft.ruleset || ''; }
+  else if (g) { rows = g.participants.map(x => ({ name: pm[x.playerId]?.name || '', faction: x.faction, points: x.points, result: x.result })); date = g.date; note = g.note; ruleset = g.ruleset || ''; }
+  else { const n0 = last ? Math.min(8, Math.max(3, last.participants.length)) : 6; rows = Array.from({ length: n0 }, () => ({ name: '', faction: '', points: '', result: 'L' })); date = today(); note = ''; ruleset = (last && last.ruleset) || ''; }
   const n = rows.length;
   gform = { id: g ? g.id : null, pendingId: (draft && draft.pendingId) || null, draft: null, manual: false, focusRow: 0, rows };
   const maxN = Math.max(8, n);
@@ -823,6 +890,7 @@ function openGame(id, draft) {
         <div class="field"><label>Date</label><input type="date" name="date" required value="${esc(date)}"></div>
         <div class="field"><label>Number of players</label><select id="pcount">${Array.from({ length: maxN - 2 }, (_, i) => i + 3).map(v => `<option ${v === n ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
       </div>
+      <div class="field"><label>Expansion played</label><select name="ruleset" required><option value="" ${ruleset ? '' : 'selected'} disabled>Choose an expansion…</option>${RULESETS.map(([k, l]) => `<option value="${k}" ${ruleset === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
       <div id="chips"></div>
       <div class="glabels"><span>Player</span><span>Faction</span><span>Points</span><span>Result</span></div>
       <div id="grows">${rowsHTML()}</div>
@@ -872,8 +940,9 @@ function pickPlayer(name) {
 
 async function saveGame(form) {
   syncRows(); const rows = gform.rows, err = m => { $('#err').textContent = m; $('#err').scrollIntoView({ block: 'nearest' }); };
-  const date = new FormData(form).get('date'), note = norm(new FormData(form).get('note') || '');
+  const date = new FormData(form).get('date'), note = norm(new FormData(form).get('note') || ''), ruleset = new FormData(form).get('ruleset') || '';
   if (!date) return err('Enter a date.');
+  if (!RULESET_MAP[ruleset]) return err('Pick which expansion the game was played with.');
   const names = rows.map(r => norm(r.name));
   if (names.some(n => !n)) return err('Enter a name for every player.');
   if (new Set(names.map(key)).size !== names.length) return err('The same player is listed more than once.');
@@ -884,10 +953,10 @@ async function saveGame(form) {
   if (winners !== 1) return err(winners === 0 ? 'Mark the winner.' : 'Only one player can be the winner.');
   const max = Math.max(...rows.map(r => Number(r.points))), w = rows.find(r => r.result === 'W');
   if (Number(w.points) < max && !confirm('The selected winner does not have the most points. Continue?')) return;
-  const payload = { date, note, participants: rows.map((r, i) => ({ name: names[i], faction: r.faction, points: Number(r.points), result: r.result })) };
+  const payload = { date, ruleset, note, participants: rows.map((r, i) => ({ name: names[i], faction: r.faction, points: Number(r.points), result: r.result })) };
 
   if (!sess.admin) {                                   // guest: ask for the code first, then send to the admin for approval
-    gform.draft = { date, note, rows: payload.participants.map(x => ({ name: x.name, faction: x.faction, points: x.points, result: x.result })) };
+    gform.draft = { date, ruleset, note, rows: payload.participants.map(x => ({ name: x.name, faction: x.faction, points: x.points, result: x.result })) };
     openCodeStep(); return;
   }
   const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
@@ -897,7 +966,7 @@ async function saveGame(form) {
       : wasEdit ? await adminCall('PUT', '/api/games/' + enc(gform.id), payload)
         : await adminCall('POST', '/api/games', payload);
     gform = null; closeDialog();
-    state.tab = wasPending && db.pending.length ? 'requests' : 'games'; state.filters = { player: '', faction: '', from: '', to: '' }; render(); window.scrollTo(0, 0);
+    state.tab = wasPending && db.pending.length ? 'requests' : 'games'; state.filters = { player: '', faction: '', ruleset: '', from: '', to: '' }; render(); window.scrollTo(0, 0);
     toast((wasPending ? 'Request approved, game saved.' : 'Game saved.') + (j.created && j.created.length ? ' New players: ' + j.created.join(', ') + '.' : ''));
   } catch (e) { err(e.message); btn.disabled = false; }
 }
@@ -906,7 +975,7 @@ async function saveGame(form) {
 function openCodeStep() {
   const d = gform.draft;
   openDialog(shell('<h3>Confirm submission</h3>',
-    `<div class="box">Game from <b>${esc(fmtDate(d.date))}</b> · ${d.rows.length} players. The admin has to approve it before it goes into the database.</div>
+    `<div class="box">Game from <b>${esc(fmtDate(d.date))}</b> · ${d.rows.length} players · ${esc(rulesetName(d.ruleset))}. The admin has to approve it before it goes into the database.</div>
      <div class="field"><label>Code for submitting games</label><input name="code" autocomplete="off" autocapitalize="off" spellcheck="false" required></div>
      <div class="field"><label>Your name (optional)</label><input name="who" maxlength="40" value="${esc(ls.get(NAME_KEY) || '')}"></div>`,
     `<div class="err" id="err"></div><div class="btns"><button type="button" data-a="back-form">Back</button><button class="primary" type="submit">Send to admin</button></div>`,
@@ -919,7 +988,7 @@ async function submitCode(form) {
   const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
   const d = gform.draft;
   try {
-    await api('POST', '/api/submit', { date: d.date, note: d.note, submitter: who, participants: d.rows.map(r => ({ name: r.name, faction: r.faction, points: Number(r.points), result: r.result })) }, { code });
+    await api('POST', '/api/submit', { date: d.date, ruleset: d.ruleset, note: d.note, submitter: who, participants: d.rows.map(r => ({ name: r.name, faction: r.faction, points: Number(r.points), result: r.result })) }, { code });
     if (who) ls.set(NAME_KEY, who);
     gform = null; closeDialog();
     toast('Game sent to the admin for approval. It will appear in the database once accepted.');
@@ -991,10 +1060,10 @@ async function exportJSON() {
 function exportCSV() {
   const E = elo(), pm = Object.fromEntries(db.players.map(p => [p.id, p]));
   const cell = v => { v = String(v ?? ''); return /[";\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
-  const lines = [['Date', 'Game', 'Player', 'Faction', 'Points', 'Place', 'Result', 'Elo before', 'Elo after', 'Note'].join(';')];
+  const lines = [['Date', 'Game', 'Expansion', 'Player', 'Faction', 'Points', 'Place', 'Result', 'Elo before', 'Elo after', 'Note'].join(';')];
   const games = db.games.slice().sort((a, b) => a.date.localeCompare(b.date) || a.createdAt - b.createdAt);
   games.forEach((g, gi) => { const em = E.byGame[g.id] || new Map(); g.participants.forEach(x => { const e = em.get(x.playerId);
-    lines.push([g.date, gi + 1, pm[x.playerId]?.name || '', facName(x.faction), x.points, e ? e.place : '', x.result === 'W' ? 'Win' : 'Loss', e ? Math.round(e.before) : '', e ? Math.round(e.after) : '', g.note].map(cell).join(';')); }); });
+    lines.push([g.date, gi + 1, rulesetName(g.ruleset), pm[x.playerId]?.name || '', facName(x.faction), x.points, e ? e.place : '', x.result === 'W' ? 'Win' : 'Loss', e ? e.beforeR : '', e ? e.afterR : '', g.note].map(cell).join(';')); }); });
   download('nostromo-games-' + today() + '.csv', '﻿' + lines.join('\r\n'), 'text/csv;charset=utf-8');
   toast('CSV downloaded (one row per player per game).');
 }
@@ -1023,7 +1092,7 @@ document.addEventListener('click', async e => {
       case 'data': openData(); break;
       case 'new-game': openGame(null); break;
       case 'edit-game': openGame(id); break;
-      case 'edit-pending': { const p = db.pending.find(x => x.id === id); if (p) openGame(null, { pendingId: p.id, date: p.date, note: p.note, rows: p.participants }); break; }
+      case 'edit-pending': { const p = db.pending.find(x => x.id === id); if (p) openGame(null, { pendingId: p.id, date: p.date, ruleset: p.ruleset, note: p.note, rows: p.participants }); break; }
       case 'back-form': openGame(null, gform && gform.draft); break;
       case 'pick': pickPlayer(el.dataset.name); break;
       case 'del-game': { const g = db.games.find(x => x.id === id); if (g && confirm('Delete the game from ' + fmtDate(g.date) + '?\nElo for all players will be recalculated.')) { await adminCall('DELETE', '/api/games/' + enc(id)); render(); toast('Game deleted.'); } break; }
@@ -1040,7 +1109,7 @@ document.addEventListener('click', async e => {
         break;
       }
       case 'sort': { const t = el.dataset.tab === 'factions' ? 'fsort' : 'sort', k = el.dataset.key; state[t] = state[t].key === k ? { key: k, dir: -state[t].dir } : { key: k, dir: ascKey(k) ? 1 : -1 }; render(); break; }
-      case 'clear-filters': state.filters = { player: '', faction: '', from: '', to: '' }; render(); break;
+      case 'clear-filters': state.filters = { player: '', faction: '', ruleset: '', from: '', to: '' }; render(); break;
       case 'export-json': await exportJSON(); break;
       case 'export-csv': if (!db.games.length) toast('There are no games to export.'); else exportCSV(); break;
       case 'import': $('#file').click(); break;
@@ -1058,6 +1127,7 @@ document.addEventListener('change', async e => {
   try {
     if (t.dataset && t.dataset.filter) { state.filters[t.dataset.filter] = t.value; render(); }
     else if (t.dataset && t.dataset.sortsel) { state[t.dataset.sortsel === 'factions' ? 'fsort' : 'sort'] = { key: t.value, dir: ascKey(t.value) ? 1 : -1 }; render(); }
+    else if (t.dataset && 'gsort' in t.dataset) { state.gsort = t.value; render(); }
     else if (t.dataset && t.dataset.setting === 'k' && sess.admin) {
       const v = Number(t.value);
       if (Number.isFinite(v) && v >= 1 && v <= 200) { await adminCall('PUT', '/api/settings', { k: v }); render(); toast('K factor changed, elo recalculated.'); }
